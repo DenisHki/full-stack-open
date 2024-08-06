@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 const App = () => {
   const anecdotes = [
@@ -20,7 +21,7 @@ const App = () => {
     while (randomIndex === selected) {
       randomIndex = Math.floor(Math.random() * anecdotes.length);
     }
-    console.log('Next', randomIndex)
+    //console.log('Next', randomIndex)
     setSelected(randomIndex)
   }
 
@@ -30,14 +31,27 @@ const App = () => {
     setVotes(newVotes);
   };
 
+  const maxVotes = Math.max(...votes);
+  const mostVotedIndex = votes.indexOf(maxVotes);
+
   return (
-    <div>
+    <div className="container">
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <div>
         <button onClick={handleVote}>Vote</button>
         <button onClick={handleNext}>Next anecdote</button>
       </div>
+      <h1>Anecdote with most votes</h1>
+      {maxVotes > 0 ? (
+        <div>
+          <p>{anecdotes[mostVotedIndex]}</p>
+          <p>has {maxVotes} votes</p>
+        </div>
+      ) : (
+        <p>No votes yet</p>
+      )}
     </div>
   );
 };
