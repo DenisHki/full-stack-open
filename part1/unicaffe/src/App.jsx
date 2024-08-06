@@ -1,7 +1,25 @@
 import { useState } from "react";
 import "./App.css";
 
-function App() {
+
+const Statistics = ({good, neutral, bad}) => {
+  const allFeedbacks = good + neutral + bad;
+  const average = allFeedbacks > 0 ? ((good - bad) / allFeedbacks).toFixed(2) : 0;
+  const positive = allFeedbacks > 0 ? ((good * 100) / allFeedbacks).toFixed(2) : 0;
+
+  return (
+    <>
+      <div>good: {good}</div>
+      <div>neutral: {neutral}</div>
+      <div>bad: {bad}</div>
+      <div>all: {allFeedbacks}</div>
+      <div>average: {average}</div>
+      <div>positive: {positive}%</div>
+    </>
+  );
+};
+
+const App = () => {
   const [feedback, setFeedback] = useState({
     good: 0,
     neutral: 0,
@@ -15,18 +33,6 @@ function App() {
     }));
   };
 
-  const allFeedbacks = feedback.good + feedback.neutral + feedback.bad;
-  let average = ((feedback.good - feedback.bad) / allFeedbacks).toFixed(2);
-
-  if (allFeedbacks === 0) {
-    average = 0;
-  }
-
-  let positive = ((feedback.good * 100) / allFeedbacks).toFixed(2);
-  if (feedback.good === 0) {
-    positive = 0;
-  }
-
   return (
     <>
       <h1>Give Feedback</h1>
@@ -36,12 +42,7 @@ function App() {
         <button onClick={() => handleClick("bad")}>Bad</button>
       </div>
       <h2>Statistics</h2>
-      <div>good: {feedback.good}</div>
-      <div>neutral: {feedback.neutral}</div>
-      <div>bad: {feedback.bad}</div>
-      <div>all: {allFeedbacks}</div>
-      <div>average: {average}</div>
-      <div>positive: {positive}%</div>
+      <Statistics {...feedback} />
     </>
   );
 }
