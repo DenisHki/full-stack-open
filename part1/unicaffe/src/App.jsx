@@ -1,12 +1,16 @@
 import { useState } from "react";
 import "./App.css";
 
-
-const Statistics = ({good, neutral, bad}) => {
+const Statistics = ({ good, neutral, bad }) => {
   const allFeedbacks = good + neutral + bad;
-  const average = allFeedbacks > 0 ? ((good - bad) / allFeedbacks).toFixed(2) : 0;
-  const positive = allFeedbacks > 0 ? ((good * 100) / allFeedbacks).toFixed(2) : 0;
+  const average =
+    allFeedbacks > 0 ? ((good - bad) / allFeedbacks).toFixed(2) : 0;
+  const positive =
+    allFeedbacks > 0 ? ((good * 100) / allFeedbacks).toFixed(2) : 0;
 
+  if (allFeedbacks === 0) {
+    return <div>No feedback given</div>;
+  }
   return (
     <>
       <div>good: {good}</div>
@@ -45,6 +49,6 @@ const App = () => {
       <Statistics {...feedback} />
     </>
   );
-}
+};
 
 export default App;
