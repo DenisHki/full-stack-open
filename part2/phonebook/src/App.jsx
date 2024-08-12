@@ -11,6 +11,17 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault();
     const newPerson = { name: newName };
+
+    if (!newName) {
+      alert("enter a valid name");
+      return;
+    }
+
+    if (persons.find(person => person.name.toLowerCase === newName.toLowerCase)) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     setPersons([...persons, newPerson]);
     setNewName("");
   };
@@ -30,8 +41,8 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person, index) => (
-          <li key={index}>{person.name}</li>
+        {persons.map((person) => (
+          <li key={person.name}>{person.name}</li>
         ))}
       </ul>
     </div>
