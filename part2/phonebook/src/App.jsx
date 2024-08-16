@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -13,12 +14,12 @@ const App = () => {
 
   const handleNameChange = (e) => {
     setNewName(e.target.value);
-    console.log("name", e.target.value);
+    console.log("from name", e.target.value);
   };
 
   const handleNumberChange = (e) => {
     setNewNumber(e.target.value);
-    console.log("number", e.target.value);
+    console.log("from number", e.target.value);
   };
 
   const handleFilteredbyName = (e) => {
@@ -61,12 +62,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Filter filtered={filtered} handleFilteredbyName={handleFilteredbyName} />
+      <h2>Add a new number</h2>
       <form>
-        <div>
-          Find number by name:{" "}
-          <input value={filtered} onChange={handleFilteredbyName} />
-        </div>
-        <h2>Add a new number</h2>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
