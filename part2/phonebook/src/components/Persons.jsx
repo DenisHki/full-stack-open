@@ -1,7 +1,17 @@
-const Persons = (props) => {
-    return (
-        <div></div>
-    )
-}
+import Person from "./Person";
 
-export default Persons
+const Persons = (props) => {
+  return (
+    <ul>
+      {props.filteredPersons.length === 0 ? (
+        <p>No names to show</p>
+      ) : (
+        props.filteredPersons.map((person) => (
+          <Person key={person.id} person={person} />
+        ))
+      )}
+    </ul>
+  );
+};
+
+export default Persons;
