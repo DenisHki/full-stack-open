@@ -34,8 +34,6 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault();
-    const newPerson = { id: Date.now(), name: newName, number: newNumber };
-
     if (!newName || !newNumber) {
       alert("enter a valid name and number");
       return;
@@ -54,10 +52,13 @@ const App = () => {
       alert(`${newNumber} is already added to phonebook`);
       return;
     }
+    const newPerson = { name: newName, number: newNumber };
 
-    setPersons([...persons, newPerson]);
-    setNewName("");
-    setNewNumber("");
+    axios.post("http://localhost:3001/persons", newPerson).then((response) => {
+      setPersons(persons.concat(response.data));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const filteredPersons = persons.filter((person) =>
