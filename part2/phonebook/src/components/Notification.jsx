@@ -1,4 +1,5 @@
 const Notification = ({ notification }) => {
+    
     if (!notification || !notification.message) {
       return null;
     }
