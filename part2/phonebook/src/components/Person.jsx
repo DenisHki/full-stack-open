@@ -15,7 +15,6 @@ const Person = (props) => {
       <Button type="button" onClick={deleteHandler} className={classes.delete}>
         Delete
       </Button>
-      <Button type="button" className={classes.update}>Update</Button>
     </li>
   );
 };

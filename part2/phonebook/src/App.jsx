@@ -4,7 +4,6 @@ import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/persons";
 
-
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
@@ -33,7 +32,7 @@ const App = () => {
     console.log("from handleSearchbyName", e.target.value);
   };
 
-  // create a new person
+  // create or update a person
   const addPerson = (e) => {
     e.preventDefault();
     if (!newName || !newNumber) {
@@ -41,12 +40,30 @@ const App = () => {
       return;
     }
 
-    if (
-      persons.find(
-        (person) => person.name.toLowerCase() === newName.toLowerCase()
-      )
-    ) {
-      alert(`${newName} is already added to phonebook`);
+    const existingPerson = persons.find(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
+    );
+
+    if (existingPerson) {
+      if (
+        window.confirm(
+          `${existingPerson.name} already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        console.log(existingPerson.name);
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        personService
+          .updateNumber(existingPerson.id, updatedPerson)
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== existingPerson.id ? person : response.data
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
       return;
     }
 
