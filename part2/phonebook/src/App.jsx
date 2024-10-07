@@ -112,7 +112,7 @@ const App = () => {
         console.log(error);
       });
   };
-
+  
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filtered.toLowerCase())
   );

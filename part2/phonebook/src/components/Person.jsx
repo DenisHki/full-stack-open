@@ -12,7 +12,7 @@ const Person = (props) => {
   return (
     <li>
       {props.person.name} {props.person.number}
-      <Button type="button" onClick={deleteHandler} className={classes.delete}>
+      <Button type="button" onClick={deleteHandler} className={classes.button}>
         Delete
       </Button>
     </li>

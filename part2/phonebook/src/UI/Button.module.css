@@ -1,27 +1,20 @@
 .button {
-  font: inherit;
-  border: 1px solid #4f005f;
+    font: inherit;
+    border: 1px solid #4f005f;
+    background: #e73232;
+    color: white;
+    padding: 0.15rem; 
+    margin: 0.1rem;
+    cursor: pointer;
+  }
   
-  color: white;
-  padding: 0.15rem;
-  margin: 0.1rem;
-  cursor: pointer;
-}
-
-.delete {
-  background: #e73232;
-}
-
-.update {
-  background: #eadb06;
-}
-
-.button:hover,
-.button:active {
-  background: #741188;
-  border-color: #741188;
-}
-
-.button:focus {
-  outline: none;
-}
+  .button:hover,
+  .button:active {
+    background: #741188;
+    border-color: #741188;
+  }
+  
+  .button:focus {
+    outline: none;
+  }
+  
