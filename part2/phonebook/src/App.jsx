@@ -3,7 +3,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/persons";
-import axios from "axios";
+
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -63,6 +63,13 @@ const App = () => {
     });
   };
 
+  // delete person
+  const deletePerson = (id) => {
+    personService.deletePersonById(id).then(() => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
+  };
+
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filtered.toLowerCase())
   );
@@ -80,7 +87,7 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} deletePerson={deletePerson} />
     </div>
   );
 };

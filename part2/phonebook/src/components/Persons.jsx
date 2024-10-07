@@ -7,7 +7,7 @@ const Persons = (props) => {
         <p>No names to show</p>
       ) : (
         props.filteredPersons.map((person) => (
-          <Person key={person.id} person={person} />
+          <Person key={person.id} person={person} deletePerson={props.deletePerson}/>
         ))
       )}
     </ul>
