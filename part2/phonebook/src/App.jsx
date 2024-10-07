@@ -9,27 +9,34 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filtered, setFiltered] = useState("");
+  const [changeMessage, setChangeMessage] = useState("");
 
   // get all persons
   useEffect(() => {
-    personService.getAll().then((response) => {
-      setPersons(response.data);
-    });
+    personService
+      .getAll()
+      .then((initialResult) => {
+        setPersons(initialResult);
+      })
+      .catch((error) => {
+        setChangeMessage("Couldn't fetch persons.");
+        console.error("Fetch error:", error);
+      });
   }, []);
 
   const handleNameChange = (e) => {
     setNewName(e.target.value);
-    console.log("from name", e.target.value);
+    //console.log("from name", e.target.value);
   };
 
   const handleNumberChange = (e) => {
     setNewNumber(e.target.value);
-    console.log("from number", e.target.value);
+    //console.log("from number", e.target.value);
   };
 
   const handleFilteredbyName = (e) => {
     setFiltered(e.target.value);
-    console.log("from handleSearchbyName", e.target.value);
+    //console.log("from handleSearchbyName", e.target.value);
   };
 
   // create or update a person
@@ -50,18 +57,23 @@ const App = () => {
           `${existingPerson.name} already added to phonebook, replace the old number with a new one?`
         )
       ) {
-        console.log(existingPerson.name);
         const updatedPerson = { ...existingPerson, number: newNumber };
         personService
           .updateNumber(existingPerson.id, updatedPerson)
-          .then((response) => {
+          .then((changedPerson) => {
+            //console.log(response.data)
             setPersons(
               persons.map((person) =>
-                person.id !== existingPerson.id ? person : response.data
+                person.id !== existingPerson.id ? person : changedPerson
               )
             );
             setNewName("");
             setNewNumber("");
+            setChangeMessage(`Successfully updated ${newName}'s number.`);
+          })
+          .catch((error) => {
+            setChangeMessage("Failed to update person.");
+            console.error("Update error:", error);
           });
       }
       return;
@@ -73,18 +85,32 @@ const App = () => {
     }
     const newPerson = { name: newName, number: newNumber };
 
-    personService.create(newPerson).then((response) => {
-      setPersons(persons.concat(response.data));
-      setNewName("");
-      setNewNumber("");
-    });
+    personService
+      .create(newPerson)
+      .then((addedPerson) => {
+        setPersons(persons.concat(addedPerson));
+        setNewName("");
+        setNewNumber("");
+        setChangeMessage(`Successfully added ${newName}.`);
+      })
+      .catch((error) => {
+        setChangeMessage("Failed to add person.");
+        console.error("Creation error:", error);
+      });
   };
 
   // delete person
   const deletePerson = (id) => {
-    personService.deletePersonById(id).then(() => {
-      setPersons(persons.filter((person) => person.id !== id));
-    });
+    personService
+      .deletePersonById(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+        alert(`Successfully deleted ${id}.`);
+      })
+      .catch((error) => {
+        setChangeMessage("Failed to delete person.");
+        console.log(error);
+      });
   };
 
   const filteredPersons = persons.filter((person) =>
