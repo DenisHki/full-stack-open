@@ -1,4 +1,3 @@
-
 const CountryDetails = ({ country }) => {
   const languages = Object.values(country.languages);
 

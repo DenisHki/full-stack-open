@@ -1,10 +1,8 @@
 const CountryFilter = ({ filter, handleFilterChange }) => {
 
-  //const {filter, handleFilterChange} = props
-
   return (
     <div>
-      <label htmlFor="countryFilter">Find countries: </label>
+      <label>Find countries: </label>
       <input
         id="countryFilter"
         value={filter}
