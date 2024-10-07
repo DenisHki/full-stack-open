@@ -1,3 +1,5 @@
+import Weather from "./Weather";
+
 const CountryDetails = ({ country }) => {
   const languages = Object.values(country.languages);
 
@@ -17,6 +19,7 @@ const CountryDetails = ({ country }) => {
         alt={`Flag of ${country.name.common}`}
         style={{ width: "200px" }}
       />
+      <Weather capital={country.capital}/>
     </div>
   );
 };
