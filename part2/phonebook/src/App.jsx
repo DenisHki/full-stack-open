@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filtered, setFiltered] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState({ message: null, type: "" });
 
   // get all persons
   useEffect(() => {
@@ -21,6 +21,13 @@ const App = () => {
       })
       .catch((error) => {
         console.log("Couldn't fetch data", error);
+        setNotification({
+          message: "Error fetching data from the server",
+          type: "error",
+        });
+        setTimeout(() => {
+          setNotification({ message: null, type: "" });
+        }, 5000);
       });
   }, []);
 
@@ -67,13 +74,23 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
-            setErrorMessage(`The number of ${newName} is updated`);
+            setNotification({
+              message: `The number of ${newName} is updated`,
+              type: "success",
+            });
             setTimeout(() => {
-              setErrorMessage(null);
+              setNotification({ message: null, type: "" });
             }, 5000);
           })
           .catch((error) => {
             console.log("Something went wrong", error);
+            setNotification({
+              message: `Information of ${newName} has already been removed from server`,
+              type: "error",
+            });
+            setTimeout(() => {
+              setNotification({ message: null, type: "" });
+            }, 5000);
           });
       }
       return;
@@ -90,30 +107,41 @@ const App = () => {
         setPersons(persons.concat(addedPerson));
         setNewName("");
         setNewNumber("");
-        setErrorMessage(`Added ${newName}`);
+        setNotification({ message: `Added ${newName}`, type: "success" });
         setTimeout(() => {
-          setErrorMessage(null);
+          setNotification({ message: null, type: "" });
         }, 5000);
       })
       .catch((error) => {
-        console.error("Creation error:", error);
+        console.log("Creation error:", error);
       });
   };
 
   // delete person
   const deletePerson = (id) => {
     const personToDelete = persons.find((person) => person.id === id);
+
     personService
       .deletePersonById(id)
       .then(() => {
         setPersons(persons.filter((person) => person.id !== id));
-        setErrorMessage(`Successfully deleted ${personToDelete.name}`);
+        setNotification({
+          message: `Successfully deleted ${personToDelete.name}`,
+          type: "success",
+        });
         setTimeout(() => {
-          setErrorMessage(null);
+          setNotification({ message: null, type: "" });
         }, 5000);
       })
       .catch((error) => {
         console.log(error);
+        setNotification({
+          message: `Information of ${personToDelete.name} has already been removed from server`,
+          type: "error",
+        });
+        setTimeout(() => {
+          setNotification({ message: null, type: "" });
+        }, 5000);
       });
   };
 
@@ -124,7 +152,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
       <Filter filtered={filtered} onSearchChange={handleFilteredbyName} />
       <h2>Add a new number</h2>
       <PersonForm
