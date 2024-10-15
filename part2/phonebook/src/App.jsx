@@ -153,6 +153,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <h2>New line</h2>
       <Notification notification={notification} />
       <Filter filtered={filtered} onSearchChange={handleFilteredbyName} />
       <h2>Add a new number</h2>
