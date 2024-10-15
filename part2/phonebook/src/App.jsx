@@ -17,6 +17,7 @@ const App = () => {
     personService
       .getAll()
       .then((initialResult) => {
+        console.log("Fetched persons:", initialResult);
         setPersons(initialResult);
       })
       .catch((error) => {
@@ -151,6 +152,7 @@ const App = () => {
 
   return (
     <div>
+      <h2>Phonebook</h2>
       <h2>Phonebook</h2>
       <Notification notification={notification} />
       <Filter filtered={filtered} onSearchChange={handleFilteredbyName} />
