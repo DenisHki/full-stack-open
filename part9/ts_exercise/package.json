@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "ts-node": "ts-node",
+    "calculateBmi": "ts-node bmiCalculator.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Denis Chuvakov",
@@ -12,5 +13,8 @@
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "ts_exercise": "file:"
   }
 }
