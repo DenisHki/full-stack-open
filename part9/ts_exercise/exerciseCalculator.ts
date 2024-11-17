@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface Results {
   periodLength: number;
   trainingDays: number;
@@ -7,6 +9,18 @@ interface Results {
   rating: 1 | 2 | 3;
   ratingDescription: string;
 }
+
+const parseArguments = (args: string[]): { hours: number[], target: number, } => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  const target = Number(args[2]);
+  const hours = args.slice(3).map(Number);
+
+  if (isNotNumber(target) || hours.some(isNotNumber)) {
+    throw new Error("All arguments must be numbers.");
+  }
+
+  return { hours, target };
+};
 
 const calculateExercises = (hours: number[], target: number): Results => {
   const periodLength = hours.length;
@@ -41,7 +55,10 @@ const calculateExercises = (hours: number[], target: number): Results => {
 };
 
 try {
-  console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+  const {hours, target} = parseArguments(process.argv);
+  const result = calculateExercises(hours, target);
+  console.log(result);
+  //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
 } catch (error: unknown) {
   let errorMessage = "Something went wrong: ";
   if (error instanceof Error) {
