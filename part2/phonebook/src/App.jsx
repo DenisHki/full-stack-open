@@ -48,6 +48,27 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault();
     const newPerson = { name: newName, number: newNumber };
+
+    if (newName.length < 3) {
+      setNotification({
+        message: "Name must be at least 3 characters long.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: null, type: "" }), 5000);
+      return;
+    }
+
+    const phoneVal = /^\d{2,3}-\d{7,}$/;
+    if (!phoneVal.test(newNumber)) {
+      setNotification({
+        message:
+          "The phone number should have the following format: 09-1234556 or 040-22334455",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: null, type: "" }), 5000);
+      return;
+    }
+
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
