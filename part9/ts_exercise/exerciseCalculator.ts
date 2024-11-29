@@ -18,7 +18,6 @@ const parseArguments = (args: string[]): { hours: number[], target: number, } =>
   if (isNotNumber(target) || hours.some(isNotNumber)) {
     throw new Error("All arguments must be numbers.");
   }
-
   return { hours, target };
 };
 
