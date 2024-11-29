@@ -1,9 +1,9 @@
-interface PersonData {
+export interface PersonData {
   height: number;
   weight: number;
 }
 
-const parseArguments = (args: string[]): PersonData => {
+export const parseArguments = (args: string[]): PersonData => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
@@ -17,7 +17,7 @@ const parseArguments = (args: string[]): PersonData => {
   }
 };
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number): string => {
   if (height <= 0 || weight <= 0) {
     return "Invalid height or weight.";
   }
@@ -32,10 +32,12 @@ const calculateBmi = (height: number, weight: number) => {
   }
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  const result = calculateBmi(height, weight);
-  console.log(result);
-} catch (error) {
-  console.error(`Error: ${(error as Error).message}`);
+if (require.main === module) {
+  try {
+    const { height, weight } = parseArguments(process.argv);
+    const result = calculateBmi(height, weight);
+    console.log(result);
+  } catch (error) {
+    console.error(`Error: ${(error as Error).message}`);
+  }
 }
