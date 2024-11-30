@@ -1,6 +1,6 @@
 import { isNotNumber } from "./utils";
 
-interface Results {
+export interface Results {
   periodLength: number;
   trainingDays: number;
   target: number;
@@ -10,21 +10,21 @@ interface Results {
   ratingDescription: string;
 }
 
-const parseArguments = (args: string[]): { hours: number[], target: number, } => {
+export const parseArguments = (args: string[]): { daily_exercises: number[], target: number, } => {
   if (args.length < 4) throw new Error("Not enough arguments");
   const target = Number(args[2]);
-  const hours = args.slice(3).map(Number);
+  const daily_exercises = args.slice(3).map(Number);
 
-  if (isNotNumber(target) || hours.some(isNotNumber)) {
+  if (isNotNumber(target) || daily_exercises.some(isNotNumber)) {
     throw new Error("All arguments must be numbers.");
   }
-  return { hours, target };
+  return { daily_exercises, target };
 };
 
-const calculateExercises = (hours: number[], target: number): Results => {
-  const periodLength = hours.length;
-  const trainingDays = hours.filter((n) => n > 0).length;
-  const total = hours.reduce((acc, n) => acc + n, 0);
+export const calculateExercises = (daily_exercises: number[], target: number): Results => {
+  const periodLength = daily_exercises.length;
+  const trainingDays = daily_exercises.filter((n) => n > 0).length;
+  const total = daily_exercises.reduce((acc, n) => acc + n, 0);
   const average = total / periodLength;
   const success = average >= target;
   let rating: 1 | 2 | 3;
@@ -53,15 +53,16 @@ const calculateExercises = (hours: number[], target: number): Results => {
   return results;
 };
 
-try {
-  const {hours, target} = parseArguments(process.argv);
-  const result = calculateExercises(hours, target);
-  console.log(result);
-  //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
-} catch (error: unknown) {
-  let errorMessage = "Something went wrong: ";
-  if (error instanceof Error) {
-    errorMessage += error.message;
+if (require.main === module) {
+  try {
+    const { daily_exercises, target } = parseArguments(process.argv);
+    const result = calculateExercises(daily_exercises, target);
+    console.log(result);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong: ";
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
