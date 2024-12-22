@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import express, { Response } from "express";
 //import patientEntries from "../../data/patients";
 import patientService from "../services/patientService";
@@ -16,6 +18,14 @@ router.get("/:id", (req, res) => {
   } else {
     res.sendStatus(404);
   }
+});
+
+router.post("/", (req, res) => {
+  const entry = req.body;
+  const addedPatient = patientService.addPatient(
+    entry
+  );
+  res.json(addedPatient);
 });
 
 export default router;
