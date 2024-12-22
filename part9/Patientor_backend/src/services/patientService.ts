@@ -19,4 +19,9 @@ const getNonSensitivePatients = (): NonSensitivePatient[] => {
   );
 };
 
-export default { getPatients, getNonSensitivePatients };
+const getPatientById = (id: string): PatientEntry | undefined => {
+  const patient = patients.find((p) => p.id === id);
+  return patient;
+};
+
+export default { getPatients, getNonSensitivePatients, getPatientById };
