@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Patient, Gender } from "../../types";
+import { Patient, Gender, Diagnosis } from "../../types";
 import { apiBaseUrl } from "../../constants";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import { Box, Typography } from "@mui/material";
 
-const PatientDetailsPage: React.FC = () => {
+interface PatientDetailsPageProps {
+  diagnoses: Diagnosis[];
+}
+
+const PatientDetailsPage: React.FC<PatientDetailsPageProps> = ({
+  diagnoses,
+}) => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,9 +68,15 @@ const PatientDetailsPage: React.FC = () => {
           {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
             <div>
               <ul>
-                {entry.diagnosisCodes.map((code, idx) => (
-                  <li key={idx}>{code}</li>
-                ))}
+                {entry.diagnosisCodes.map((code, idx) => {
+                  const diagnosis = diagnoses.find((d) => d.code === code);
+                  return (
+                    <li key={idx}>
+                      {code} -{" "}
+                      {diagnosis ? diagnosis.name : "Unknown diagnosis"}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
