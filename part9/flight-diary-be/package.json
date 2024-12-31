@@ -21,7 +21,9 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
+    "express": "^4.18.4",
     "ilaris-diaries": "file:"
   }
 }
