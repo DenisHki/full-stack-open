@@ -3,6 +3,7 @@ export interface Diary {
   date: string;
   weather: string;
   visibility: string;
+  comment: string;
 }
 
 export enum Weather {
@@ -21,3 +22,4 @@ export enum Visibility {
 }
 
 export type NewDiary = Omit<Diary, "id" | "entries">;
+export type NonSensitiveDiaryEntry = Omit<Diary, 'comment'>;
