@@ -14,11 +14,33 @@ export interface PatientEntry {
   ssn?: string;
   gender: Gender;
   occupation: string;
-  entries: Entry[];
+  entries: (HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry)[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Entry {
+  id: string;
+  date: string;
+  type: "Hospital" | "OccupationalHealthcare" | "HealthCheck";
+  description: string;
+  specialist: string;
+  diagnosisCodes?: string[];
+  healthCheckRating?: number; 
+}
+
+export interface HospitalEntry extends Entry {
+  type: "Hospital";
+  discharge: { date: string; criteria: string };
+}
+
+export interface OccupationalHealthcareEntry extends Entry {
+  type: "OccupationalHealthcare";
+  employerName: string;
+  sickLeave?: { startDate: string; endDate: string };
+}
+
+export interface HealthCheckEntry extends Entry {
+  type: "HealthCheck";
+  healthCheckRating: number;
 }
 
 export type NewPatientEntry = z.infer<typeof newEntrySchema>;
