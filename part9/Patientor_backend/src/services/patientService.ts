@@ -10,27 +10,30 @@ const getPatients = (): PatientEntry[] => {
 
 const getNonSensitivePatients = (): NonSensitivePatient[] => {
   return patientEntries.map(
-    ({ id, name, dateOfBirth, gender, occupation }) => ({
+    ({ id, name, dateOfBirth, gender, occupation, entries }) => ({
       id,
       name,
       dateOfBirth,
       gender,
       occupation,
+      entries,
     })
   );
 };
 
 const getPatientById = (id: string): PatientEntry | undefined => {
   const patient = patients.find((p) => p.id === id);
+  console.log("Retrieved patient:", patient);
   return patient;
 };
 
 const addPatient = (
   entry: NewPatientEntry
 ): PatientEntry => {
-  const newPatientEntry = {
+  const newPatientEntry: PatientEntry = {
     id: uuid(),
     ...entry,
+    entries: [],
   };
   patients.push(newPatientEntry);
   return newPatientEntry;
