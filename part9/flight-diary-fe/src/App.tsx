@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Diary } from "./types";
 import diariesService from "./services/diaries";
-import { TextField, InputLabel, Button } from "@mui/material";
+import {
+  TextField,
+  InputLabel,
+  Button,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 import { AxiosError } from "axios";
+import { Weather, Visibility } from "./types";
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -67,34 +77,60 @@ function App() {
         <InputLabel style={{ marginTop: 20 }}>Date</InputLabel>
         <TextField
           name="date"
+          type="date"
           fullWidth
           value={newDiary.date}
           onChange={handleInputChange}
           required
         />
-        <InputLabel style={{ margin: 5 }}>Visibility</InputLabel>
-        <TextField
-          name="visibility"
-          fullWidth
-          value={newDiary.visibility}
-          onChange={handleInputChange}
-          required
-        />
-        <InputLabel style={{ margin: 5 }}>Weather</InputLabel>
-        <TextField
-          name="weather"
-          fullWidth
-          value={newDiary.weather}
-          onChange={handleInputChange}
-          required
-        />
-        <InputLabel style={{ margin: 5 }}>Comment</InputLabel>
+
+        <FormControl style={{ marginTop: 20 }}>
+          <FormLabel>Visibility</FormLabel>
+          <RadioGroup
+            name="visibility"
+            value={newDiary.visibility}
+            onChange={handleInputChange}
+          >
+            {Object.values(Visibility).map((visibility) => (
+              <FormControlLabel
+                key={visibility}
+                value={visibility}
+                control={<Radio />}
+                label={visibility}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+
+        <div style={{ marginTop: 20 }} />
+
+        <FormControl style={{ marginTop: 20 }}>
+          <FormLabel>Weather</FormLabel>
+          <RadioGroup
+            name="weather"
+            value={newDiary.weather}
+            onChange={handleInputChange}
+          >
+            {Object.values(Weather).map((weather) => (
+              <FormControlLabel
+                key={weather}
+                value={weather}
+                control={<Radio />}
+                label={weather}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+
+        <InputLabel style={{ marginTop: 20 }}>Comment</InputLabel>
         <TextField
           name="comment"
           fullWidth
           value={newDiary.comment}
           onChange={handleInputChange}
+          required
         />
+
         <Button
           style={{
             float: "right",
@@ -106,6 +142,7 @@ function App() {
           Add
         </Button>
       </form>
+
       <h1>Diary entries</h1>
       {diaries.map((diary) => (
         <div

@@ -3,7 +3,7 @@ export interface Diary {
   date: string;
   weather: string;
   visibility: string;
-  comment: string;
+  comment?: string;
 }
 
 export enum Weather {
