@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Patient, Gender, Diagnosis } from "../../types";
+import { Patient, Gender, Diagnosis, Entry } from "../../types";
 import { apiBaseUrl } from "../../constants";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
+import EntryDetails from "../EntryDetails";
 
 interface PatientDetailsPageProps {
   diagnoses: Diagnosis[];
 }
 
-const PatientDetailsPage: React.FC<PatientDetailsPageProps> = ({
-  diagnoses,
-}) => {
+const PatientDetailsPage: React.FC<PatientDetailsPageProps> = () => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,28 +59,11 @@ const PatientDetailsPage: React.FC<PatientDetailsPageProps> = ({
       <p>occupation: {patient.occupation}</p>
 
       <h2>entries</h2>
-      {patient.entries.map((entry, index) => (
-        <div key={index}>
-          <p>
-            {entry.date} {entry.description}
-          </p>
-          {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-            <div>
-              <ul>
-                {entry.diagnosisCodes.map((code, idx) => {
-                  const diagnosis = diagnoses.find((d) => d.code === code);
-                  return (
-                    <li key={idx}>
-                      {code} -{" "}
-                      {diagnosis ? diagnosis.name : "Unknown diagnosis"}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
+      {patient.entries.map((entry: Entry, index: number) => (
+        <EntryDetails key={index} entry={entry} />
       ))}
+
+      <Button variant="contained">Add New Entry</Button>
     </div>
   );
 };
