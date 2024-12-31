@@ -23,7 +23,7 @@ export interface Entry {
   type: "Hospital" | "OccupationalHealthcare" | "HealthCheck";
   description: string;
   specialist: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: Array<DiagnoseEntry['code']>;
   healthCheckRating?: number; 
 }
 
@@ -38,9 +38,9 @@ export interface OccupationalHealthcareEntry extends Entry {
   sickLeave?: { startDate: string; endDate: string };
 }
 
-export interface HealthCheckEntry extends Entry {
+interface HealthCheckEntry extends Entry {
   type: "HealthCheck";
-  healthCheckRating: number;
+  healthCheckRating: HealthCheckRating;
 }
 
 export type NewPatientEntry = z.infer<typeof newEntrySchema>;
@@ -53,8 +53,19 @@ export type NonSensitivePatient = Omit<PatientEntry, "ssn">;
 
 export type NewSensitivePatientEntry = Omit<PatientEntry, "id">;
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type EntryWithoutId = UnionOmit<Entry, 'id'>;
+
 export enum Gender {
   Male = "male",
   Female = "female",
   Other = "other",
+}
+
+export enum HealthCheckRating {
+  "Healthy" = 0,
+  "LowRisk" = 1,
+  "HighRisk" = 2,
+  "CriticalRisk" = 3
 }
