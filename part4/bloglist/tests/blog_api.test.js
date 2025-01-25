@@ -45,6 +45,18 @@ test("blogs are returned as json and contain the correct number of blogs", async
   assert.strictEqual(response.body.length, initialBlogs.length);
 });
 
+test("unique identifier property is named id", async () => {
+  const response = await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  response.body.forEach((blog) => {
+    assert(blog.id !== undefined, "Blog does not have an 'id' property");
+    assert.strictEqual(blog._id, undefined, "Blog still has an '_id' property");
+  });
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
