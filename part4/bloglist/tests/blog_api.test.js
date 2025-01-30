@@ -2,35 +2,17 @@ const { test, after, beforeEach } = require("node:test");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const assert = require("assert");
+const helper = require("./test_helper");
 const app = require("../app");
 
 const api = supertest(app);
 
 const Blog = require("../models/blog");
 
-const initialBlogs = [
-  {
-    _id: "5a422a851b54a676234d17f7",
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-    __v: 0,
-  },
-  {
-    _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-    __v: 0,
-  },
-];
-
 beforeEach(async () => {
   await Blog.deleteMany({});
 
-  for (let b of initialBlogs) {
+  for (let b of helper.initialBlogs) {
     const blogObject = new Blog(b);
     await blogObject.save();
   }
@@ -42,7 +24,7 @@ test("blogs are returned as json and contain the correct number of blogs", async
     .expect(200)
     .expect("Content-Type", /application\/json/);
 
-  assert.strictEqual(response.body.length, initialBlogs.length);
+  assert.strictEqual(response.body.length, helper.initialBlogs.length);
 });
 
 test("unique identifier property is named id", async () => {
@@ -55,10 +37,6 @@ test("unique identifier property is named id", async () => {
     assert(blog.id !== undefined, "Blog does not have an 'id' property");
     assert.strictEqual(blog._id, undefined, "Blog still has an '_id' property");
   });
-});
-
-after(async () => {
-  await mongoose.connection.close();
 });
 
 test("a valid blog can be added", async () => {
@@ -75,11 +53,13 @@ test("a valid blog can be added", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
 
-  const titles = response.body.map((r) => r.title);
-
-  assert.strictEqual(response.body.length, initialBlogs.length + 1);
-
+  const titles = blogsAtEnd.map((b) => b.title);
   assert(titles.includes("New Blog"));
+});
+
+after(async () => {
+  await mongoose.connection.close();
 });
