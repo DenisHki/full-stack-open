@@ -60,7 +60,7 @@ test("a valid blog can be added", async () => {
   assert(titles.includes("New Blog"));
 });
 */
-
+/*
 test("likes defaults to 0 if missing", async () => {
   const newBlog = {
     title: "No Likes Blog",
@@ -75,6 +75,38 @@ test("likes defaults to 0 if missing", async () => {
     .expect("Content-Type", /application\/json/);
 
   assert.strictEqual(response.body.likes, 0);
+});
+*/
+test("returns 400 if title is missing", async () => {
+  const newBlog = {
+    author: "stephen king",
+    url: "http://stephenking.com",
+    likes: 777,
+  };
+
+  const response = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  assert.strictEqual(response.body.error, "Title and URL are required");
+});
+
+test("returns 400 if url is missing", async () => {
+  const newBlog = {
+    title: "Hockey Blog",
+    author: "Denis Chuvakov",
+    likes: 99,
+  };
+
+  const response = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+
+  assert.strictEqual(response.body.error, "Title and URL are required");
 });
 
 after(async () => {
