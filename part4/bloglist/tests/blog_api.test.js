@@ -60,3 +60,26 @@ test("unique identifier property is named id", async () => {
 after(async () => {
   await mongoose.connection.close();
 });
+
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "New Blog",
+    author: "New Author",
+    url: "http://example.com/blog3",
+    likes: 5,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+
+  const titles = response.body.map((r) => r.title);
+
+  assert.strictEqual(response.body.length, initialBlogs.length + 1);
+
+  assert(titles.includes("New Blog"));
+});
