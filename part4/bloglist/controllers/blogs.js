@@ -8,22 +8,18 @@ blogsRouter.get("/", async (request, response) => {
 });
 
 // GET BLOG BY ID
-blogsRouter.get("/:id", async (request, response, next) => {
-  try {
-    const blog = await Blog.findById(request.params.id);
+blogsRouter.get("/:id", async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
 
-    if (blog) {
-      response.json(blog);
-    } else {
-      response.status(404).json({ error: "Blog not found" });
-    }
-  } catch (exception) {
-    next(exception);
+  if (blog) {
+    response.json(blog);
+  } else {
+    response.status(404).json({ error: "Blog not found" });
   }
 });
 
 // POST A NEW BLOG
-blogsRouter.post("/", async (request, response, next) => {
+blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
   const blog = new Blog({
@@ -33,27 +29,19 @@ blogsRouter.post("/", async (request, response, next) => {
     likes: body.likes || 0,
   });
 
-  try {
-    const savedBlog = await blog.save();
-    response.status(201).json(savedBlog);
-  } catch (exception) {
-    next(exception);
-  }
+  const savedBlog = await blog.save();
+  response.status(201).json(savedBlog);
 });
 
 // DELETE A BLOG
-blogsRouter.delete("/:id", async (request, response, next) => {
-  try {
-    const blog = await Blog.findByIdAndDelete(request.params.id);
+blogsRouter.delete("/:id", async (request, response) => {
+  const blog = await Blog.findByIdAndDelete(request.params.id);
 
-    if (!blog) {
-      return response.status(404).json({ error: "Blog not found" });
-    }
-
-    response.status(204).end();
-  } catch (exception) {
-    next(exception);
+  if (!blog) {
+    return response.status(404).json({ error: "Blog not found" });
   }
+
+  response.status(204).end();
 });
 
 // UPDATE A BLOG
@@ -67,8 +55,15 @@ blogsRouter.put("/:id", async (request, response) => {
     likes: body.likes ? body.likes : 0,
   };
 
-  await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
-  response.json(blog);
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  });
+
+  if (!updatedBlog) {
+    return response.status(404).json({ error: "Blog not found" });
+  }
+
+  response.json(updatedBlog);
 });
 
 module.exports = blogsRouter;
