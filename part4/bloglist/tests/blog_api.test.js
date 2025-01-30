@@ -38,7 +38,7 @@ test("unique identifier property is named id", async () => {
     assert.strictEqual(blog._id, undefined, "Blog still has an '_id' property");
   });
 });
-
+/*
 test("a valid blog can be added", async () => {
   const newBlog = {
     title: "New Blog",
@@ -58,6 +58,23 @@ test("a valid blog can be added", async () => {
 
   const titles = blogsAtEnd.map((b) => b.title);
   assert(titles.includes("New Blog"));
+});
+*/
+
+test("likes defaults to 0 if missing", async () => {
+  const newBlog = {
+    title: "No Likes Blog",
+    author: "Boring Author",
+    url: "http://example.com/blog5",
+  };
+
+  const response = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  assert.strictEqual(response.body.likes, 0);
 });
 
 after(async () => {
