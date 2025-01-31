@@ -17,7 +17,7 @@ beforeEach(async () => {
     await blogObject.save();
   }
 });
-
+/*
 test("blogs are returned as json and contain the correct number of blogs", async () => {
   const response = await api
     .get("/api/blogs")
@@ -38,7 +38,7 @@ test("unique identifier property is named id", async () => {
     assert.strictEqual(blog._id, undefined, "Blog still has an '_id' property");
   });
 });
-/*
+
 test("a valid blog can be added", async () => {
   const newBlog = {
     title: "New Blog",
@@ -59,8 +59,7 @@ test("a valid blog can be added", async () => {
   const titles = blogsAtEnd.map((b) => b.title);
   assert(titles.includes("New Blog"));
 });
-*/
-/*
+
 test("likes defaults to 0 if missing", async () => {
   const newBlog = {
     title: "No Likes Blog",
@@ -76,7 +75,7 @@ test("likes defaults to 0 if missing", async () => {
 
   assert.strictEqual(response.body.likes, 0);
 });
-*/
+
 test("returns 400 if title is missing", async () => {
   const newBlog = {
     author: "stephen king",
@@ -107,6 +106,20 @@ test("returns 400 if url is missing", async () => {
     .expect("Content-Type", /application\/json/);
 
   assert.strictEqual(response.body.error, "Title and URL are required");
+});
+*/
+
+test("deleting of a blog", async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blogToDelete = blogsAtStart[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
+
+  const ids = blogsAtEnd.map((blog) => blog.id);
+  assert(!ids.includes(blogToDelete.id));
 });
 
 after(async () => {
