@@ -25,6 +25,7 @@ mongoose
   });
 
 app.use(middleware.tokenExtractor);
+app.use(middleware.userExtractor)
 
 app.use(cors());
 app.use(express.static("dist"));
