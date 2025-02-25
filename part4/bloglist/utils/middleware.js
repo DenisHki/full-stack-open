@@ -13,15 +13,37 @@ const unknownEndpoint = (request, response) => {
 };
 
 const tokenExtractor = (request, response, next) => {
-	const authorization = request.get('authorization')
+  const authorization = request.get("authorization");
 
-	if (authorization && authorization.startsWith('Bearer ')){
-		request.token = authorization.replace('Bearer ', '')
-		return next()
-	}
-	request.token = null
-	return next()
-}
+  if (authorization && authorization.startsWith("Bearer ")) {
+    request.token = authorization.replace("Bearer ", "");
+    return next();
+  }
+  request.token = null;
+  return next();
+};
+
+const userExtractor = (request, response, next) => {
+  const authorization = request.get("authorization");
+
+  if (authorization && authorization.startsWith("Bearer ")) {
+    request.token = authorization.replace("Bearer ", "");
+
+    try {
+      const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+      if (!decodedToken.id) {
+        return response.status(401).json({ error: "Token invalid" });
+      }
+      request.user = decodedToken;
+      next();
+    } catch (error) {
+      return response.status(401).json({ error: "Token invalid or expired" });
+    }
+  } else {
+    return response.status(401).json({ error: "Token missing or malformed" });
+  }
+};
 
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
@@ -53,4 +75,5 @@ module.exports = {
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
+  userExtractor
 };
