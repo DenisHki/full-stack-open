@@ -1,9 +1,10 @@
-PUT http://localhost:3001/api/blogs/6775638fce352f2dd5a59e67
+PUT http://localhost:3001/api/blogs/67bdb789763e9949db522295
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdiYzIyZWNkZGIyYzcwZTU3Y2E4MmQzIiwiaWF0IjoxNzQwNDg2NzY5LCJleHAiOjE3NDA0OTAzNjl9.NwAe-X9yzbFQzwdKdCOA3cUD7aLnINJu7dvqDSVvtiM
 Content-Type: application/json
 
 {
-  "title": "My First Blog",
+  "title": "Ice Fishing",
   "author": "Denis Chuvakov",
-  "url": "https://example.com",
+  "url": "https://icefishing.com",
   "likes": 100
 }

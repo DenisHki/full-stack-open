@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs 
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdiYzIyZWNkZGIyYzcwZTU3Y2E4MmQzIiwiaWF0IjoxNzQwNDg2NzY5LCJleHAiOjE3NDA0OTAzNjl9.NwAe-X9yzbFQzwdKdCOA3cUD7aLnINJu7dvqDSVvtiM
 
 {
-    "title": "My blog",
+    "title": "My blogNew",
     "author": "Some author",
-    "url": "http://www.myblog.fi",
-    "likes": 8,
-    "userId": "67bc22ecddb2c70e57ca82d3"
+    "url": "http://www.myblognew.fi",
+    "likes": 55
 }

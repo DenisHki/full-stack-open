@@ -12,7 +12,7 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
-const extractToken = (request, response, next) => {
+const tokenExtractor = (request, response, next) => {
   const authorization = request.get("Authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     request.token = authorization.substring(7); // Remove 'Bearer ' prefix
@@ -51,5 +51,5 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  extractToken
+  tokenExtractor,
 };
