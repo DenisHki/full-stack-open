@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdiYzIyZWNkZGIyYzcwZTU3Y2E4MmQzIiwiaWF0IjoxNzQwNDkzNTUxLCJleHAiOjE3NDA0OTcxNTF9.PT3u68hhQf5JhgwdFSFhZe3HdKClsZKjtJeJ4eHImMw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdiZGViMWM4MWM4ZmZmNzBmNDU2NmE3IiwiaWF0IjoxNzQwNDk5ODExLCJleHAiOjE3NDA1MDM0MTF9.JNfSP2SkM0fpFb8jRZaw3liks8dxAPp7adR6TaYd7cA
 Content-Type: application/json
 
 {
-    "title": "My blogNew11111",
-    "author": "Some author",
-    "url": "http://www.myblognew.fi",
+    "title": "Fishing",
+    "author": "Denis",
+    "url": "http://www.fishing.fi",
     "likes": 999
 }
