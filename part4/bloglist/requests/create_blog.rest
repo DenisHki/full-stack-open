@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdiZGViMWM4MWM4ZmZmNzBmNDU2NmE3IiwiaWF0IjoxNzQwNDk5ODExLCJleHAiOjE3NDA1MDM0MTF9.JNfSP2SkM0fpFb8jRZaw3liks8dxAPp7adR6TaYd7cA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodWRlbiIsImlkIjoiNjdjMmRkZDdiYTY1MzVmMTJjZjk2ZGIxIiwiaWF0IjoxNzU2MTI1OTE1LCJleHAiOjE3NTYxMjk1MTV9.BuNjXDvubMoWpE1HfA_bIWv8u6EYP869tLLSK4xWve4
 Content-Type: application/json
 
 {
-    "title": "Fishing",
+    "title": "Books",
     "author": "Denis",
-    "url": "http://www.fishing.fi",
-    "likes": 999
+    "url": "http://www.books.fi",
+    "likes": 15
 }
