@@ -29,13 +29,17 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
+        <form
+          onSubmit={handleLogin}
+          style={{ padding: "1rem", backgroundColor: "#f4f4f4" }}
+        >
+          <div style={{ marginBottom: "1rem" }}>
             username
             <input
               type="text"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
+              style={{ marginLeft: "0.5rem" }}
             />
           </div>
           <div>
@@ -44,9 +48,12 @@ const App = () => {
               type="password"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
+              style={{ marginLeft: "0.5rem" }}
             />
           </div>
-          <button type="submit">login</button>
+          <button type="submit" style={{ marginTop: "1rem" }}>
+            login
+          </button>
         </form>
       </div>
     );
