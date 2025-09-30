@@ -3,12 +3,14 @@ import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [notification, setNotification] = useState({ message: null, type: "" });
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -28,8 +30,18 @@ const App = () => {
       const savedBlog = await blogService.create(blogData);
       setBlogs(blogs.concat(savedBlog));
       console.log("New blog saved: ", savedBlog);
+      setNotification({
+        message: `New blog ${savedBlog.title} by ${savedBlog.author} added`,
+      });
+      setTimeout(() => {
+        setNotification({ message: null });
+      }, 3000);
     } catch (error) {
       console.error("Error saving blog:", error);
+      setNotification({ message: "Error saving blog", type: "error" });
+      setTimeout(() => {
+        setNotification({ message: null, type: "" });
+      }, 3000);
     }
   };
 
@@ -45,6 +57,10 @@ const App = () => {
       setPassword("");
     } catch (exception) {
       console.error("Wrong credentials");
+      setNotification({ message: "Wrong username or password", type: "error" });
+      setTimeout(() => {
+        setNotification({ message: null, type: "" });
+      }, 3000);
     }
   };
 
@@ -52,11 +68,16 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
     blogService.setToken(null);
     setUser(null);
+    setNotification({ message: "You are logged out" });
+    setTimeout(() => {
+      setNotification({ message: null, type: "" });
+    }, 3000);
   };
 
   if (user === null) {
     return (
       <div>
+        <Notification notification={notification} />
         <h2>Log in to application</h2>
         <form
           onSubmit={handleLogin}
@@ -90,6 +111,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
       <div style={{ display: "flex", alignItems: "center" }}>
         <p style={{ marginRight: "1rem" }}>
           User <strong>{user.name}</strong> is logged in
