@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Blog from "./components/Blog";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -22,10 +23,21 @@ const App = () => {
     }
   }, []);
 
+  const handleCreateBlog = async (blogData) => {
+    try {
+      const savedBlog = await blogService.create(blogData);
+      setBlogs(blogs.concat(savedBlog));
+      console.log("New blog saved: ", savedBlog);
+    } catch (error) {
+      console.error("Error saving blog:", error);
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
       const user = await loginService.login({ username, password });
+      console.log("Logged in user:", user);
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
@@ -38,6 +50,7 @@ const App = () => {
 
   const handleLogout = async () => {
     window.localStorage.removeItem("loggedBlogAppUser");
+    blogService.setToken(null);
     setUser(null);
   };
 
@@ -77,18 +90,18 @@ const App = () => {
 
   return (
     <div>
-      <h2>Blogs</h2>
       <div style={{ display: "flex", alignItems: "center" }}>
         <p style={{ marginRight: "1rem" }}>
           User <strong>{user.name}</strong> is logged in
         </p>
-        <button onClick={handleLogout} style={{ padding: "0.5rem 0.5rem" }}>
-          Logout
-        </button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
+      <h2>Blogs</h2>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
+
+      <BlogForm onCreate={handleCreateBlog} />
     </div>
   );
 };
