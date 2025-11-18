@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Blog from "./components/Blog";
@@ -26,11 +26,16 @@ const App = () => {
     }
   }, []);
 
+  const blogFormRef = useRef();
+
   const handleCreateBlog = async (blogData) => {
     try {
       const savedBlog = await blogService.create(blogData);
       setBlogs(blogs.concat(savedBlog));
       console.log("New blog saved: ", savedBlog);
+
+      blogFormRef.current.toggleVisibility();
+
       setNotification({
         message: `New blog ${savedBlog.title} by ${savedBlog.author} added`,
       });
@@ -123,7 +128,7 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-      <Togglable buttonLabel="new blog">
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onCreate={handleCreateBlog} />
       </Togglable>
     </div>
