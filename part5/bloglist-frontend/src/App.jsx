@@ -4,6 +4,7 @@ import blogService from "./services/blogs";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -122,8 +123,9 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-
-      <BlogForm onCreate={handleCreateBlog} />
+      <Togglable buttonLabel="new blog">
+        <BlogForm onCreate={handleCreateBlog} />
+      </Togglable>
     </div>
   );
 };
