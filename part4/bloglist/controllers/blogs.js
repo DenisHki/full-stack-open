@@ -88,9 +88,7 @@ blogsRouter.delete("/:id", async (request, response) => {
 blogsRouter.put("/:id", async (request, response) => {
   const body = request.body;
 
-  const token = request.token;
-
-  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
   if (!decodedToken.id) {
     return response.status(401).json({ error: "Token missing or invalid" });
   }
@@ -100,15 +98,12 @@ blogsRouter.put("/:id", async (request, response) => {
     return response.status(404).json({ error: "Blog not found" });
   }
 
-  if (blog.user.toString() !== decodedToken.id.toString()) {
-    return response.status(401).json({ error: "Unauthorized access" });
-  }
-
   const updatedBlog = {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes !== undefined ? body.likes : blog.likes,
+    likes: body.likes, 
+    user: body.user     
   };
 
   const savedBlog = await Blog.findByIdAndUpdate(
@@ -119,5 +114,6 @@ blogsRouter.put("/:id", async (request, response) => {
 
   response.json(savedBlog);
 });
+
 
 module.exports = blogsRouter;
