@@ -14,7 +14,9 @@ const App = () => {
   const [notification, setNotification] = useState({ message: null, type: "" });
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService
+      .getAll()
+      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
   }, []);
 
   useEffect(() => {
@@ -80,7 +82,11 @@ const App = () => {
 
     returnedBlog.user = blog.user;
 
-    setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
+    setBlogs(
+      blogs
+        .map((b) => (b.id !== blog.id ? b : returnedBlog))
+        .sort((a, b) => b.likes - a.likes)
+    );
   };
 
   const handleLogout = async () => {
