@@ -18,8 +18,8 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const isCreator = blog.user && user && (blog.user.username === user.username || blog.user.id === user.id)
 
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="blog">
+      <div className="blogSummary">
         {blog.title} — {blog.author}{' '}
         <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
       </div>
