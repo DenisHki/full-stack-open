@@ -25,7 +25,6 @@ describe("Blog app", () => {
       cy.get("#username").type("chuden");
       cy.get("#password").type("password");
       cy.get("#login-button").click();
-
       cy.contains("User Denis Chuvakov is logged in");
     });
 
@@ -33,31 +32,40 @@ describe("Blog app", () => {
       cy.get("#username").type("chuden");
       cy.get("#password").type("wrongpassword");
       cy.get("#login-button").click();
-
       cy.contains("Wrong username or password");
       cy.contains("User Denis Chuvakov is logged in").should("not.exist");
     });
   });
 
-  // 5.19
+  // 5.19 & 5.20
   describe("When logged in", () => {
     beforeEach(() => {
       cy.get("#username").type("chuden");
       cy.get("#password").type("password");
       cy.get("#login-button").click();
       cy.contains("User Denis Chuvakov is logged in");
-    });
 
-    it("A blog can be created", () => {
       cy.contains("new blog").click();
-
-      cy.get("#title").type("A New Cypress Blog");
+      cy.get("#title").type("A Blog to Like");
       cy.get("#author").type("Denis Chuvakov");
       cy.get("#url").type("http://cypress-blog.com");
       cy.get("#create-button").click();
+    });
 
-      cy.get(".blog").should("contain", "A New Cypress Blog");
-      cy.get(".blog").should("contain", "Denis Chuvakov");
+    it("A blog can be created", () => {
+      cy.contains("A Blog to Like").should("exist");
+      cy.contains("Denis Chuvakov").should("exist");
+    });
+
+    it("A user can like a blog", () => {
+      cy.contains("A Blog to Like")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.contains("likes: 0");
+          cy.contains("like").click();
+          cy.contains("likes: 1");
+        });
     });
   });
 });
