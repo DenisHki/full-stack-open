@@ -37,7 +37,7 @@ describe("Blog app", () => {
     });
   });
 
-  // 5.19 & 5.20
+  // 5.19–5.21
   describe("When logged in", () => {
     beforeEach(() => {
       cy.get("#username").type("chuden");
@@ -46,19 +46,19 @@ describe("Blog app", () => {
       cy.contains("User Denis Chuvakov is logged in");
 
       cy.contains("new blog").click();
-      cy.get("#title").type("A Blog to Like");
+      cy.get("#title").type("A Blog to Test");
       cy.get("#author").type("Denis Chuvakov");
       cy.get("#url").type("http://cypress-blog.com");
       cy.get("#create-button").click();
     });
 
     it("A blog can be created", () => {
-      cy.contains("A Blog to Like").should("exist");
+      cy.contains("A Blog to Test").should("exist");
       cy.contains("Denis Chuvakov").should("exist");
     });
 
     it("A user can like a blog", () => {
-      cy.contains("A Blog to Like")
+      cy.contains("A Blog to Test")
         .parent()
         .within(() => {
           cy.contains("view").click();
@@ -66,6 +66,17 @@ describe("Blog app", () => {
           cy.contains("like").click();
           cy.contains("likes: 1");
         });
+    });
+
+    it("The creator can delete the blog", () => {
+      cy.contains("A Blog to Test")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.contains("remove").click();
+        });
+
+      cy.contains("A Blog to Test").should("not.exist");
     });
   });
 });
