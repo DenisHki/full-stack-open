@@ -25,7 +25,7 @@ mongoose
   });
 
 app.use(middleware.tokenExtractor);
-app.use(middleware.userExtractor)
+app.use(middleware.userExtractor);
 
 app.use(cors());
 app.use(express.static("dist"));
@@ -35,6 +35,20 @@ app.use(middleware.requestLogger);
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+
+if (process.env.NODE_ENV === "test") {
+  const testingRouter = require("express").Router();
+  const Blog = require("./models/blog");
+  const User = require("./models/user");
+
+  testingRouter.post("/reset", async (req, res) => {
+    await Blog.deleteMany({});
+    await User.deleteMany({});
+    res.status(204).end();
+  });
+  console.log("NODE_ENV =", process.env.NODE_ENV);
+  app.use("/api/testing", testingRouter);
+}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
