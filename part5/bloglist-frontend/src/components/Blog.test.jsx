@@ -1,78 +1,112 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Blog from "./Blog";
 import { vi } from "vitest";
+import Blog from "./Blog";
+import BlogForm from "./BlogForm";
 
-const blog = {
-  title: "Fishing",
-  author: "Denis Chuvakov",
-  url: "https://fishing.com/",
-  likes: 5,
-  user: { username: "denis1", name: "Denis" },
-};
+describe("<Blog /> component", () => {
+  let blog;
+  let mockLike;
+  let mockDelete;
+  let mockUser;
 
-const mockUser = { username: "denis1" };
-const mockLike = vi.fn();
-const mockDelete = vi.fn();
+  beforeEach(() => {
+    blog = {
+      title: "Fishing",
+      author: "Denis Chuvakov",
+      url: "https://fishing.com/",
+      likes: 5,
+      user: { username: "denis1", name: "Denis" },
+    };
 
-// 5.13
-test("renders title and author but not url or likes by default", () => {
-  const { container } = render(
-    <Blog
-      blog={blog}
-      handleLike={mockLike}
-      handleDelete={mockDelete}
-      user={mockUser}
-    />
-  );
+    mockLike = vi.fn();
+    mockDelete = vi.fn();
+    mockUser = { username: "denis1" };
+  });
 
-  expect(screen.getByText("Fishing — Denis Chuvakov")).toBeDefined();
+  // 5.13
+  test("renders title and author but not url or likes by default", () => {
+    const { container } = render(
+      <Blog
+        blog={blog}
+        handleLike={mockLike}
+        handleDelete={mockDelete}
+        user={mockUser}
+      />
+    );
 
-  const details = container.querySelector(".blogDetails");
-  expect(details).toBeNull();
+    expect(screen.getByText("Fishing — Denis Chuvakov")).toBeDefined();
+
+    const details = container.querySelector(".blogDetails");
+    expect(details).toBeNull();
+  });
+
+  // 5.14
+  test("shows url and likes when the view button is clicked", async () => {
+    const user = userEvent.setup();
+    render(
+      <Blog
+        blog={blog}
+        handleLike={mockLike}
+        handleDelete={mockDelete}
+        user={mockUser}
+      />
+    );
+
+    const button = screen.getByText("view");
+    await user.click(button);
+
+    expect(screen.getByText("https://fishing.com/")).toBeDefined();
+    expect(screen.getByText("likes: 5")).toBeDefined();
+  });
+
+  // 5.15
+  test("if like button is clicked twice, event handler is called twice", async () => {
+    const user = userEvent.setup();
+    render(
+      <Blog
+        blog={blog}
+        handleLike={mockLike}
+        handleDelete={mockDelete}
+        user={mockUser}
+      />
+    );
+    const viewButton = screen.getByText("view");
+    await user.click(viewButton);
+
+    const likeButton = screen.getByText("like");
+    await user.click(likeButton);
+    await user.click(likeButton);
+
+    expect(mockLike.mock.calls).toHaveLength(2);
+  });
 });
 
-// 5.14
-test("shows url and likes when the view button is clicked", async () => {
-  const { container } = render(
-    <Blog
-      blog={blog}
-      handleLike={mockLike}
-      handleDelete={mockDelete}
-      user={mockUser}
-    />
-  );
+// 5.16
+describe("<BlogForm /> component", () => {
+  test("calls onCreate with correct details when new blog is created", async () => {
+    const createBlog = vi.fn();
+    const user = userEvent.setup();
 
-  const user = userEvent.setup();
+    render(<BlogForm onCreate={createBlog} />);
 
-  const viewButton = screen.getByText("view");
-  await user.click(viewButton);
+    const titleInput = screen.getByPlaceholderText("Title");
+    const authorInput = screen.getByPlaceholderText("Author");
+    const urlInput = screen.getByPlaceholderText("URL");
+    const sendButton = screen.getByText("Add Blog");
 
-  const details = container.querySelector(".blogDetails");
-  expect(details).toBeDefined();
-  expect(details).toHaveTextContent("https://fishing.com/");
-  expect(details).toHaveTextContent("likes: 5");
-});
+    await user.type(titleInput, "Fishing");
+    await user.type(authorInput, "Denis Chuvakov");
+    await user.type(urlInput, "https://fishing.com/");
+    await user.click(sendButton);
 
-// 5.15
-test("if like button is clicked twice, event handler is called twice", async () => {
-  render(
-    <Blog
-      blog={blog}
-      handleLike={mockLike}
-      handleDelete={mockDelete}
-      user={mockUser}
-    />
-  );
+    console.log(createBlog.mock.calls)
 
-  const user = userEvent.setup();
-
-  const viewButton = screen.getByText("view");
-  await user.click(viewButton);
-
-  const likeButton = screen.getByText("like");
-  await user.click(likeButton);
-  await user.click(likeButton);
-
-  expect(mockLike).toHaveBeenCalledTimes(2);
+    expect(createBlog.mock.calls).toHaveLength(1);
+    expect(createBlog.mock.calls[0][0]).toEqual({
+      title: "Fishing",
+      author: "Denis Chuvakov",
+      url: "https://fishing.com/",
+    });
+  });
 });
