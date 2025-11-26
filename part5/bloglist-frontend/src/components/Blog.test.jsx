@@ -53,3 +53,26 @@ test("shows url and likes when the view button is clicked", async () => {
   expect(details).toHaveTextContent("https://fishing.com/");
   expect(details).toHaveTextContent("likes: 5");
 });
+
+// 5.15
+test("if like button is clicked twice, event handler is called twice", async () => {
+  render(
+    <Blog
+      blog={blog}
+      handleLike={mockLike}
+      handleDelete={mockDelete}
+      user={mockUser}
+    />
+  );
+
+  const user = userEvent.setup();
+
+  const viewButton = screen.getByText("view");
+  await user.click(viewButton);
+
+  const likeButton = screen.getByText("like");
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  expect(mockLike).toHaveBeenCalledTimes(2);
+});
