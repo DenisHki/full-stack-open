@@ -18,9 +18,11 @@ const AnecdoteForm = () => {
       <h2>create new</h2>
       <form onSubmit={addAnecdote}>
         <div>
-          <input name="anecdote" />
+          <input name="anecdote" placeholder="type new anecdote"/>
         </div>
-        <button type="submit">create</button>
+        <button type="submit" style={{ marginTop: "10px" }} >
+          create
+        </button>
       </form>
     </div>
   );

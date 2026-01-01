@@ -16,7 +16,7 @@ const AnecdoteList = () => {
   };
 
   if (anecdotes.length === 0) {
-    return <div>No such anecdote...</div>;
+    return <div style={{color: 'rgba(235, 17, 17, 1)',fontWeight: 'bold'}}>No such anecdote...</div>;
   }
   
   return (
@@ -26,7 +26,7 @@ const AnecdoteList = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => vote(anecdote.id)} style={{margin: "10px"}}>vote</button>
           </div>
         </div>
       ))}

@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { filterChange } from "../reducers/filterReducer";
 
-
 const Filter = () => {
   const dispatch = useDispatch();
 
@@ -15,7 +14,13 @@ const Filter = () => {
 
   return (
     <div style={style}>
-      filter <input type="text" name="filter" onChange={handleChange} />
+      Filter{" "}
+      <input
+        type="text"
+        name="filter"
+        placeholder="search anecdote"
+        onChange={handleChange}
+      />
     </div>
   );
 };
