@@ -11,7 +11,7 @@ const App = () => {
   const result = useQuery({
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes,
-    retry: 1
+    retry: 1,
   })
 
   console.log(JSON.parse(JSON.stringify(result)))
