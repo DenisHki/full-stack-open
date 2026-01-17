@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./App.css";
 
 const Menu = () => {
   const padding = {
@@ -54,8 +55,7 @@ const About = () => (
 );
 
 const Footer = () => (
-
-  <div>
+  <div className="footer">
     Anecdote app for <a href="https://fullstackopen.com/">Full Stack Open</a>.
     See{" "}
     <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">
