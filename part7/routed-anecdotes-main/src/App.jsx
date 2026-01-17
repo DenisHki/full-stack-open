@@ -1,12 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
+import { useMatch, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
 const Menu = () => {
@@ -28,10 +22,8 @@ const Menu = () => {
   );
 };
 
-const Anecdote = ({ anecdotes }) => {
-  const { id } = useParams();
-  const anecdote = anecdotes.find((a) => a.id === Number(id));
-  console.log(anecdotes)
+const Anecdote = ({ anecdote }) => {
+  if (!anecdote) return <div>Not found</div>;
   return (
     <div>
       <h2>{anecdote.content}</h2> <div>author: {anecdote.author}</div>
@@ -81,10 +73,10 @@ const About = () => (
 const Footer = () => (
   <div className="footer">
     Anecdote app for <a href="https://fullstackopen.com/">Full Stack Open</a>.
-    See{" "}
+    See
     <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">
       https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
-    </a>{" "}
+    </a>
     for the source code.
   </div>
 );
@@ -164,13 +156,7 @@ const App = () => {
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
-  /*
-  const Anecdote = () => {
-    const id = useParams().id;
-    const anecdote = anecdoteById(id);
-    return <Anecdote anecdote={anecdote} />;
-  };
-*/
+
   const vote = (id) => {
     const anecdote = anecdoteById(id);
 
@@ -182,21 +168,26 @@ const App = () => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
 
+  const match = useMatch("/anecdotes/:id");
+  const anecdote = match
+    ? anecdotes.find((a) => a.id === Number(match.params.id))
+    : null;
+
   return (
-    <Router>
+    <>
       <h1>Software anecdotes</h1>
       <Menu />
       <Routes>
         <Route
           path="/anecdotes/:id"
-          element={<Anecdote anecdotes={anecdotes} />}
+          element={<Anecdote anecdote={anecdote} />}
         />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" element={<About />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
       </Routes>
       <Footer />
-    </Router>
+    </>
   );
 };
 
