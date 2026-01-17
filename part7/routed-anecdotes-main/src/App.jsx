@@ -1,5 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useParams,
+} from "react-router-dom";
 import "./App.css";
 
 const Menu = () => {
@@ -21,12 +28,29 @@ const Menu = () => {
   );
 };
 
+const Anecdote = ({ anecdotes }) => {
+  const { id } = useParams();
+  const anecdote = anecdotes.find((a) => a.id === Number(id));
+  console.log(anecdotes)
+  return (
+    <div>
+      <h2>{anecdote.content}</h2> <div>author: {anecdote.author}</div>
+      <div>
+        info: <a href={anecdote.info}>{anecdote.info}</a>
+      </div>
+      <div>votes: {anecdote.votes}</div>
+    </div>
+  );
+};
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
       ))}
     </ul>
   </div>
@@ -44,7 +68,7 @@ const About = () => (
       more general than the brief tale itself, such as to characterize a person
       by delineating a specific quirk or trait, to communicate an abstract idea
       about a person, place, or thing through the concrete details of a short
-      narrative. An anecdote is "a story with a point."
+      narrative. An anecdote is &quot;a story with a point.&quot;
     </em>
 
     <p>
@@ -140,7 +164,13 @@ const App = () => {
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
-
+  /*
+  const Anecdote = () => {
+    const id = useParams().id;
+    const anecdote = anecdoteById(id);
+    return <Anecdote anecdote={anecdote} />;
+  };
+*/
   const vote = (id) => {
     const anecdote = anecdoteById(id);
 
@@ -157,6 +187,10 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Menu />
       <Routes>
+        <Route
+          path="/anecdotes/:id"
+          element={<Anecdote anecdotes={anecdotes} />}
+        />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" element={<About />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
