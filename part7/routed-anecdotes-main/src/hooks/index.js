@@ -11,5 +11,5 @@ export const useField = (type) => {
     setValue("");
   };
 
-  return { type, value, onChange, reset };
+  return { attributes: { type, value, onChange }, reset };
 };
