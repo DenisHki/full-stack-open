@@ -1,56 +1,56 @@
-const config = require("./utils/config");
-const express = require("express");
-require("express-async-errors");
-const app = express();
-const cors = require("cors");
-const blogsRouter = require("./controllers/blogs");
-const usersRouter = require("./controllers/users");
-const loginRouter = require("./controllers/login");
+const config = require('./utils/config')
+const express = require('express')
+require('express-async-errors')
+const app = express()
+const cors = require('cors')
+const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 
-const middleware = require("./utils/middleware");
-const logger = require("./utils/logger");
-const mongoose = require("mongoose");
+const middleware = require('./utils/middleware')
+const logger = require('./utils/logger')
+const mongoose = require('mongoose')
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false)
 
-logger.info("connecting to", config.MONGODB_URI);
+logger.info('connecting to', config.MONGODB_URI)
 
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
-    logger.info("connected to MongoDB");
+    logger.info('connected to MongoDB')
   })
   .catch((error) => {
-    logger.error("error connecting to MongoDB:", error.message);
-  });
+    logger.error('error connecting to MongoDB:', error.message)
+  })
 
-app.use(middleware.tokenExtractor);
-app.use(middleware.userExtractor);
+app.use(middleware.tokenExtractor)
+app.use(middleware.userExtractor)
 
-app.use(cors());
-app.use(express.static("dist"));
-app.use(express.json());
-app.use(middleware.requestLogger);
+app.use(cors())
+app.use(express.static('dist'))
+app.use(express.json())
+app.use(middleware.requestLogger)
 
-app.use("/api/blogs", blogsRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/login", loginRouter);
+app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
-if (process.env.NODE_ENV === "test") {
-  const testingRouter = require("express").Router();
-  const Blog = require("./models/blog");
-  const User = require("./models/user");
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('express').Router()
+  const Blog = require('./models/blog')
+  const User = require('./models/user')
 
-  testingRouter.post("/reset", async (req, res) => {
-    await Blog.deleteMany({});
-    await User.deleteMany({});
-    res.status(204).end();
-  });
-  console.log("NODE_ENV =", process.env.NODE_ENV);
-  app.use("/api/testing", testingRouter);
+  testingRouter.post('/reset', async (req, res) => {
+    await Blog.deleteMany({})
+    await User.deleteMany({})
+    res.status(204).end()
+  })
+  console.log('NODE_ENV =', process.env.NODE_ENV)
+  app.use('/api/testing', testingRouter)
 }
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
-module.exports = app;
+module.exports = app

@@ -6,7 +6,9 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start:test": "cross-env NODE_ENV=test node index.js",
-    "test": "cross-env  NODE_ENV=test node --test"
+    "test": "cross-env  NODE_ENV=test node --test",
+    "format": "prettier --write \"**/*.js\"",
+    "format:check": "prettier --check \"**/*.js\""
   },
   "keywords": [],
   "author": "",
@@ -30,8 +32,10 @@
     "@types/express": "^5.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.3",
     "globals": "^15.14.0",
+    "prettier": "^3.8.0",
     "supertest": "^7.0.0"
   }
 }
