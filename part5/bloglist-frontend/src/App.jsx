@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { showNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState({ message: null, type: '' })
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService
@@ -38,18 +41,14 @@ const App = () => {
 
       blogFormRef.current.toggleVisibility()
 
-      setNotification({
-        message: `New blog ${savedBlog.title} by ${savedBlog.author} added`,
-      })
-      setTimeout(() => {
-        setNotification({ message: null })
-      }, 3000)
+      dispatch(
+        showNotification(
+          `New blog ${savedBlog.title} by ${savedBlog.author} added`
+        )
+      )
     } catch (error) {
       console.error('Error saving blog:', error)
-      setNotification({ message: 'Error saving blog', type: 'error' })
-      setTimeout(() => {
-        setNotification({ message: null, type: '' })
-      }, 3000)
+      dispatch(showNotification('Error saving blog', 'error'))
     }
   }
 
@@ -65,10 +64,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       console.error('Wrong credentials')
-      setNotification({ message: 'Wrong username or password', type: 'error' })
-      setTimeout(() => {
-        setNotification({ message: null, type: '' })
-      }, 3000)
+      dispatch(showNotification('Wrong username or password', 'error'))
     }
   }
 
@@ -99,21 +95,12 @@ const App = () => {
       try {
         await blogService.remove(blog.id)
         setBlogs(blogs.filter((b) => b.id !== blog.id))
-        setNotification({
-          message: `Blog ${blog.title} by ${blog.author} removed`,
-        })
-        setTimeout(() => {
-          setNotification({ message: null, type: '' })
-        }, 3000)
+        dispatch(
+          showNotification(`Blog ${blog.title} by ${blog.author} removed`)
+        )
       } catch (error) {
         console.error('Error deleting blog:', error)
-        setNotification({
-          message: 'Error deleting blog',
-          type: 'error',
-        })
-        setTimeout(() => {
-          setNotification({ message: null, type: '' })
-        }, 3000)
+        dispatch(showNotification('Error deleting blog', 'error'))
       }
     }
   }
@@ -122,16 +109,13 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     blogService.setToken(null)
     setUser(null)
-    setNotification({ message: 'You are logged out' })
-    setTimeout(() => {
-      setNotification({ message: null, type: '' })
-    }, 3000)
+    dispatch(showNotification('You are logged out'))
   }
 
   if (user === null) {
     return (
       <div>
-        <Notification notification={notification} />
+        <Notification />
         <h2>Log in to application</h2>
         <form
           onSubmit={handleLogin}
@@ -167,7 +151,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification notification={notification} />
+      <Notification />
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <p style={{ marginRight: '1rem' }}>
           User <strong>{user.name}</strong> is logged in
