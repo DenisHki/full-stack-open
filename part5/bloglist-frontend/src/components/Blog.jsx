@@ -15,7 +15,10 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
     setVisible(!visible)
   }
 
-  const isCreator = blog.user && user && (blog.user.username === user.username || blog.user.id === user.id)
+  const isCreator =
+    blog.user &&
+    user &&
+    (blog.user.username === user.username || blog.user.id === user.id)
 
   return (
     <div style={blogStyle} className="blog">
