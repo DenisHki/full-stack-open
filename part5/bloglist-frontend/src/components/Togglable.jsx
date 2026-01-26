@@ -1,10 +1,8 @@
 import { useState, useImperativeHandle, forwardRef } from 'react'
+import { Button, Box } from '@mui/material'
 
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -17,17 +15,25 @@ const Togglable = forwardRef((props, ref) => {
   })
 
   return (
-    <div style={{ margin: '16px 0' }}>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-      </div>
+    <Box sx={{ my: 2 }}>
+      {!visible && (
+        <Button variant="contained" color="primary" onClick={toggleVisibility}>
+          {props.buttonLabel}
+        </Button>
+      )}
 
-      <div style={showWhenVisible}>
-        <div style={{ margin: '16px 0' }}>{props.children}</div>
-        <button onClick={toggleVisibility}>cancel</button>
-      </div>
-    </div>
+      {visible && (
+        <Box>
+          <Box sx={{ my: 2 }}>{props.children}</Box>
+          <Button variant="outlined" onClick={toggleVisibility}>
+            Cancel
+          </Button>
+        </Box>
+      )}
+    </Box>
   )
 })
+
+Togglable.displayName = 'Togglable'
 
 export default Togglable

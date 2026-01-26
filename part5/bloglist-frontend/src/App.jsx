@@ -1,5 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  AppBar,
+  Toolbar,
+  IconButton,
+} from '@mui/material'
+import LogoutIcon from '@mui/icons-material/Logout'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import Blog from './components/Blog'
@@ -107,64 +119,87 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <Notification />
-        <h2>Log in to application</h2>
-        <form
-          onSubmit={handleLogin}
-          style={{ padding: '1rem', backgroundColor: '#f4f4f4' }}
-        >
-          <div style={{ marginBottom: '1rem' }}>
-            username
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-              style={{ marginLeft: '0.5rem' }}
-            />
-          </div>
-          <div>
-            password
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-              style={{ marginLeft: '0.5rem' }}
-            />
-          </div>
-          <button id="login-button" type="submit" style={{ marginTop: '1rem' }}>
-            login
-          </button>
-        </form>
-      </div>
+      <Container maxWidth="sm">
+        <Box sx={{ mt: 8 }}>
+          <Notification />
+          <Paper elevation={3} sx={{ p: 4 }}>
+            <Typography variant="h4" component="h2" gutterBottom align="center">
+              Log in to application
+            </Typography>
+            <Box component="form" onSubmit={handleLogin} sx={{ mt: 3 }}>
+              <TextField
+                fullWidth
+                id="username"
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                id="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={password}
+                onChange={({ target }) => setPassword(target.value)}
+                margin="normal"
+              />
+              <Button
+                id="login-button"
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Login
+              </Button>
+            </Box>
+          </Paper>
+        </Box>
+      </Container>
     )
   }
 
   return (
-    <div>
-      <Notification />
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <p style={{ marginRight: '1rem' }}>
-          User <strong>{user.name}</strong> is logged in
-        </p>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-      <h2>Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          handleDelete={handleDelete}
-          user={user}
-        />
-      ))}
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm onCreate={handleCreateBlog} />
-      </Togglable>
-    </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Blog App
+          </Typography>
+          <Typography sx={{ mr: 2 }}>{user.name} logged in</Typography>
+          <IconButton color="inherit" onClick={handleLogout}>
+            <LogoutIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Box sx={{ mt: 3 }}>
+        <Notification />
+
+        <Typography variant="h4" component="h2" gutterBottom sx={{ mt: 3 }}>
+          Blogs
+        </Typography>
+
+        <Box sx={{ mb: 3 }}>
+          {blogs.map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleLike={handleLike}
+              handleDelete={handleDelete}
+              user={user}
+            />
+          ))}
+        </Box>
+
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <BlogForm onCreate={handleCreateBlog} />
+        </Togglable>
+      </Box>
+    </Container>
   )
 }
 

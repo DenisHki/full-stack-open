@@ -1,22 +1,11 @@
 import { useState } from 'react'
+import { TextField, Button, Box, Typography, Paper } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 
 const BlogForm = ({ onCreate }) => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-
-    if (name === 'title') {
-      setNewTitle(value)
-    } else if (name === 'author') {
-      setNewAuthor(e.target.value)
-    } else if (name === 'url') {
-      setNewUrl(value)
-    }
-    //console.log(`${name}: ${value}`);
-  }
 
   const handleSubmitBlog = async (e) => {
     e.preventDefault()
@@ -38,41 +27,53 @@ const BlogForm = ({ onCreate }) => {
   }
 
   return (
-    <div style={{ marginTop: '1rem' }}>
-      <h2>Create new blog</h2>
-      <form onSubmit={handleSubmitBlog}>
-        <input
+    <Paper elevation={2} sx={{ p: 3, mt: 2 }}>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Create new blog
+      </Typography>
+      <Box component="form" onSubmit={handleSubmitBlog}>
+        <TextField
           id="title"
-          type="text"
-          name="title"
+          label="Title"
+          variant="outlined"
+          fullWidth
           value={newTitle}
           placeholder="Title"
-          style={{ marginRight: '0.5rem' }}
-          onChange={handleChange}
+          onChange={(e) => setNewTitle(e.target.value)}
+          margin="normal"
         />
-        <input
+        <TextField
           id="author"
-          type="text"
-          name="author"
+          label="Author"
+          variant="outlined"
+          fullWidth
           value={newAuthor}
           placeholder="Author"
-          style={{ marginRight: '0.5rem' }}
-          onChange={handleChange}
+          onChange={(e) => setNewAuthor(e.target.value)}
+          margin="normal"
         />
-        <input
+        <TextField
           id="url"
-          type="text"
-          name="url"
+          label="URL"
+          variant="outlined"
+          fullWidth
           value={newUrl}
           placeholder="URL"
-          style={{ marginRight: '0.5rem' }}
-          onChange={handleChange}
+          onChange={(e) => setNewUrl(e.target.value)}
+          margin="normal"
         />
-        <button id="create-button" type="submit">
+        <Button
+          id="create-button"
+          type="submit"
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          sx={{ mt: 2 }}
+        >
           Add Blog
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Box>
+    </Paper>
   )
 }
 
