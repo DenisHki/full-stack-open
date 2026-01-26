@@ -1,0 +1,45 @@
+import { createSlice } from '@reduxjs/toolkit'
+import blogService from '../services/blogs'
+
+const blogSlice = createSlice({
+  name: 'blogs',
+  initialState: [],
+  reducers: {
+    setBlogs(state, action) {
+      return action.payload
+    },
+    appendBlog(state, action) {
+      state.push(action.payload)
+    },
+    updateBlog(state, action) {
+      const updatedBlog = action.payload
+      return state
+        .map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+        .sort((a, b) => b.likes - a.likes)
+    },
+    removeBlog(state, action) {
+      const id = action.payload
+      return state.filter((blog) => blog.id !== id)
+    },
+  },
+})
+
+export const { setBlogs, appendBlog, updateBlog, removeBlog } =
+  blogSlice.actions
+
+export const initializeBlogs = () => {
+  return async (dispatch) => {
+    const blogs = await blogService.getAll()
+    const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
+    dispatch(setBlogs(sortedBlogs))
+  }
+}
+
+export const createBlog = (blogData) => {
+  return async (dispatch) => {
+    const newBlog = await blogService.create(blogData)
+    dispatch(appendBlog(newBlog))
+  }
+}
+
+export default blogSlice.reducer
