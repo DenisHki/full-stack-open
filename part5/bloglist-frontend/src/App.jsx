@@ -7,7 +7,12 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { showNotification } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  deleteBlog,
+} from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -67,16 +72,12 @@ const App = () => {
   }
 
   const handleLike = async (blog) => {
-    const updated = {
-      ...blog,
-      likes: blog.likes + 1,
-      user: blog.user.id || blog.user,
+    try {
+      await dispatch(likeBlog(blog))
+    } catch (error) {
+      console.error('Error liking blog:', error)
+      dispatch(showNotification('Error liking blog', 'error'))
     }
-
-    const returnedBlog = await blogService.update(blog.id, updated)
-    returnedBlog.user = blog.user
-
-    console.log('Blog liked:', returnedBlog)
   }
 
   const handleDelete = async (blog) => {
@@ -86,7 +87,7 @@ const App = () => {
 
     if (confirmDelete) {
       try {
-        await blogService.remove(blog.id)
+        await dispatch(deleteBlog(blog.id))
         dispatch(
           showNotification(`Blog ${blog.title} by ${blog.author} removed`)
         )
