@@ -1,5 +1,7 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const { v1: uuid } = require("uuid");
+const { GraphQLError } = require("graphql");
 
 let authors = [
   {
@@ -101,6 +103,20 @@ const typeDefs = /* GraphQL */ `
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
+  }
 `;
 
 const resolvers = {
@@ -117,13 +133,40 @@ const resolvers = {
         filtered = filtered.filter((b) => b.genres.includes(args.genre));
       }
 
-      return filtered
+      return filtered;
     },
     allAuthors: () => authors,
   },
+
   Author: {
     bookCount: (root) => {
       return books.filter((book) => book.author === root.name).length;
+    },
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() };
+      books = books.concat(book);
+
+      if (!authors.find((a) => a.name === args.author)) {
+        const newAuthor = { name: args.author, id: uuid(), born: null };
+        authors = authors.concat(newAuthor);
+      }
+
+      return book;
+    },
+
+    editAuthor: (root, args) => {
+      const author = authors.find((a) => a.name === args.name);
+      if (!author) {
+        throw new GraphQLError("Author not found", {
+          extensions: { code: "BAD_USER_INPUT", invalidArgs: args.name },
+        });
+      }
+
+      author.born = args.setBornTo;
+      return author;
     },
   },
 };
