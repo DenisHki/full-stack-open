@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 
-const Authors = ({ show, authors }) => {
+const Authors = ({ show, authors, setError }) => {
   if (!show) return null;
 
   return (
@@ -36,7 +36,7 @@ const Authors = ({ show, authors }) => {
       </Table>
 
       <Box mt={4}>
-        <SetBirthday authors={authors}/>
+        <SetBirthday authors={authors} setError={setError}/>
       </Box>
     </Container>
   );

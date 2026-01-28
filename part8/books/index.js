@@ -112,10 +112,7 @@ const typeDefs = /* GraphQL */ `
       genres: [String!]!
     ): Book
 
-    editAuthor(
-      name: String!
-      setBornTo: Int!
-    ): Author
+    editAuthor(name: String!, setBornTo: Int!): Author
   }
 `;
 
@@ -159,6 +156,9 @@ const resolvers = {
 
     editAuthor: (root, args) => {
       const author = authors.find((a) => a.name === args.name);
+      if (args.setBornTo <= 0) {
+        throw new GraphQLError("Birth year must be positive");
+      }
       if (!author) {
         throw new GraphQLError("Author not found", {
           extensions: { code: "BAD_USER_INPUT", invalidArgs: args.name },

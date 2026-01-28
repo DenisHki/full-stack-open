@@ -10,9 +10,11 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Notify from "./components/Notify";
 
 const App = () => {
   const [page, setPage] = useState("authors");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const authorsResult = useQuery(ALL_AUTHORS);
   const booksResult = useQuery(ALL_BOOKS);
@@ -21,8 +23,16 @@ const App = () => {
     return <div>loading...</div>;
   }
 
+  const notify = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 10000);
+  };
+
   return (
     <Box mb={3}>
+      <Notify errorMessage={errorMessage} />
       <Box mb={3}>
         <Tabs
           value={page}
@@ -40,13 +50,14 @@ const App = () => {
         <Authors
           show={page === "authors"}
           authors={authorsResult.data.allAuthors}
+          setError={notify}
         />
       </Container>
       <Container maxWidth="md">
         <Books show={page === "books"} books={booksResult.data.allBooks} />
       </Container>
       <Container maxWidth="md">
-        <NewBook show={page === "add"} />
+        <NewBook show={page === "add"} setError={notify} />
       </Container>
     </Box>
   );

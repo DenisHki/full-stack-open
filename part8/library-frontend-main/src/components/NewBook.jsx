@@ -22,6 +22,15 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
+    if (!title.trim()) {
+      props.setError("Title is required");
+      return;
+    }
+    if (!author.trim()) {
+      props.setError("Author is required");
+      return;
+    }
+
     createBook({
       variables: { title, author, published: Number(published), genres },
       refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],

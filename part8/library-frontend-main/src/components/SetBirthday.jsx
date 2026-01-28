@@ -16,7 +16,7 @@ const SetBirthday = (props) => {
 
   const [setBirthyear] = useMutation(SET_BIRTHYEAR);
 
-  const { authors } = props;
+  const { authors, setError } = props;
 
   const submit = async (event) => {
     event.preventDefault();
@@ -24,6 +24,7 @@ const SetBirthday = (props) => {
     setBirthyear({
       variables: { name, setBornTo: Number(born) },
       refetchQueries: [{ query: ALL_AUTHORS }],
+      onError: (error) => setError(error.message),
     });
 
     setName("");
