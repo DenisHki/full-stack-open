@@ -36,7 +36,7 @@ const Authors = ({ show, authors }) => {
       </Table>
 
       <Box mt={4}>
-        <SetBirthday />
+        <SetBirthday authors={authors}/>
       </Box>
     </Container>
   );
