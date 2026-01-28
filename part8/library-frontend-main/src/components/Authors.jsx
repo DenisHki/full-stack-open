@@ -1,32 +1,44 @@
 import SetBirthday from "./SetBirthday";
 
-const Authors = (props) => {
-  if (!props.show) {
-    return null;
-  }
-  const authors = props.authors;
+import Container from "@mui/material/Container";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Box from "@mui/material/Box";
+
+const Authors = ({ show, authors }) => {
+  if (!show) return null;
 
   return (
-    <div>
-      <h2>authors</h2>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>born</th>
-            <th>books</th>
-          </tr>
+    <Container maxWidth="md">
+      <h2>Authors</h2>
+
+      <Table>
+        <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Born</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Books</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
           {authors.map((a) => (
-            <tr key={a.id}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
-            </tr>
+            <TableRow key={a.id}>
+              <TableCell>{a.name}</TableCell>
+              <TableCell>{a.born}</TableCell>
+              <TableCell>{a.bookCount}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-      <SetBirthday />
-    </div>
+        </TableBody>
+      </Table>
+
+      <Box mt={4}>
+        <SetBirthday />
+      </Box>
+    </Container>
   );
 };
 

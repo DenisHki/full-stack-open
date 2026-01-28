@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../queries";
-
-
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 
 const NewBook = (props) => {
   const [title, setTitle] = useState("");
@@ -37,43 +40,68 @@ const NewBook = (props) => {
   };
 
   return (
-    <div>
+    <Container maxWidth="sm">
+      <h2>Create New Book</h2>
       <form onSubmit={submit}>
-        <div>
-          title
-          <input
+        <Box mb={2}>
+          <TextField
+            label="Title"
+            size="small"
+            variant="outlined"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
-        </div>
-        <div>
-          author
-          <input
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label="Author"
+            size="small"
+            variant="outlined"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
-        </div>
-        <div>
-          published
-          <input
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label="Published"
+            size="small"
+            variant="outlined"
             type="number"
             value={published}
             onChange={({ target }) => setPublished(target.value)}
           />
-        </div>
-        <div>
-          <input
+        </Box>
+        <Box mb={2} display="flex" gap={1}>
+          <TextField
+            label="Genre"
+            size="small"
+            variant="outlined"
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
-          <button onClick={addGenre} type="button">
+          <Button
+            onClick={addGenre}
+            type="button"
+            variant="contained"
+            color="success"
+            size="small"
+          >
             add genre
-          </button>
-        </div>
-        <div>genres: {genres.join(" ")}</div>
-        <button type="submit">create book</button>
+          </Button>
+        </Box>
+        <Box mt={1} mb={2}>
+          genres: {genres.join(" ")}
+        </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          size="small"
+          endIcon={<SendIcon />}
+        >
+          create book
+        </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

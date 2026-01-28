@@ -1,3 +1,11 @@
+import Container from "@mui/material/Container";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Box from "@mui/material/Box";
+
 const Books = (props) => {
   if (!props.show) {
     return null;
@@ -6,26 +14,28 @@ const Books = (props) => {
   const books = props.books;
 
   return (
-    <div>
-      <h2>books</h2>
+    <Container maxWidth="md">
+      <h2>Books</h2>
 
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <Table>
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+            <TableCell sx={{ fontWeight: "bold" }}>Book name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Author</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Published</TableCell>
+          </TableRow>
+          </TableHead>
+          <TableBody>
+            {books.map((b) => (
+              <TableRow key={b.id} >
+                <TableCell>{b.title}</TableCell>
+                <TableCell>{b.author}</TableCell>
+                <TableCell>{b.published}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+      </Table>
+    </Container>
   );
 };
 
