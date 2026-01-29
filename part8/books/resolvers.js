@@ -6,7 +6,7 @@ const Book = require("./models/book");
 const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
-    authorCount: () => this.Author.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       return Book.find({}).populate("author");
     },
