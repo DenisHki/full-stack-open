@@ -15,12 +15,18 @@ export const ALL_BOOKS = gql`
   query {
     allBooks {
       title
-      author
       published
+      genres
       id
+      author {
+        name
+        born
+        id
+      }
     }
   }
 `;
+
 
 export const CREATE_BOOK = gql`
   mutation createBook(
@@ -36,13 +42,18 @@ export const CREATE_BOOK = gql`
       genres: $genres
     ) {
       title
-      author
       published
       genres
       id
+      author {
+        name
+        born
+        id
+      }
     }
   }
 `;
+
 
 export const SET_BIRTHYEAR = gql`
   mutation setBirthyear($name: String!, $setBornTo: Int!) {

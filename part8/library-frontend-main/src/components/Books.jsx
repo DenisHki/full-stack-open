@@ -29,7 +29,7 @@ const Books = (props) => {
             {books.map((b) => (
               <TableRow key={b.id} >
                 <TableCell>{b.title}</TableCell>
-                <TableCell>{b.author}</TableCell>
+                <TableCell>{b.author.name}</TableCell>
                 <TableCell>{b.published}</TableCell>
               </TableRow>
             ))}
