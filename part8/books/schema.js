@@ -1,8 +1,8 @@
 const typeDefs = /* GraphQL */ `
   type Book {
     title: String!
-    author: String!
     published: Int!
+    author: Author!
     genres: [String!]!
     id: ID!
   }
@@ -33,4 +33,4 @@ const typeDefs = /* GraphQL */ `
   }
 `;
 
-module.exports = typeDefs
+module.exports = typeDefs;
