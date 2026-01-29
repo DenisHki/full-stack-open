@@ -5,8 +5,6 @@ import NewBook from "./components/NewBook";
 import { useQuery } from "@apollo/client/react";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
