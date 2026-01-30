@@ -1,4 +1,3 @@
-const { v1: uuid } = require("uuid");
 const { GraphQLError } = require("graphql");
 const Author = require("./models/author");
 const Book = require("./models/book");
@@ -34,6 +33,16 @@ const resolvers = {
         try {
           await author.save();
         } catch (error) {
+          if (error.name === "ValidationError") {
+            throw new GraphQLError("Author validation failed", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.author,
+                error: error.message,
+              },
+            });
+          }
+
           throw new GraphQLError("Saving author failed", {
             extensions: {
               code: "BAD_USER_INPUT",
@@ -52,6 +61,16 @@ const resolvers = {
       try {
         await book.save();
       } catch (error) {
+        if (error.name === "ValidationError") {
+          throw new GraphQLError("Book validation failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.title,
+              error: error.message,
+            },
+          });
+        }
+
         throw new GraphQLError("Saving book failed", {
           extensions: {
             code: "BAD_USER_INPUT",
@@ -72,7 +91,12 @@ const resolvers = {
       }
 
       if (args.setBornTo <= 0) {
-        throw new GraphQLError("Birth year must be positive");
+        throw new GraphQLError("Birth year must be positive", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.setBornTo,
+          },
+        });
       }
 
       author.born = args.setBornTo;
@@ -80,6 +104,16 @@ const resolvers = {
       try {
         await author.save();
       } catch (error) {
+        if (error.name === "ValidationError") {
+          throw new GraphQLError("Validation failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.name,
+              error: error.message,
+            },
+          });
+        }
+
         throw new GraphQLError("Saving birth year failed", {
           extensions: {
             code: "BAD_USER_INPUT",
