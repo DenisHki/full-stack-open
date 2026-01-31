@@ -30,7 +30,7 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
       if (!context.currentUser) {
         throw new GraphQLError("Not authenticated", {
           extensions: {
@@ -97,7 +97,7 @@ const resolvers = {
       return book.populate("author");
     },
 
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
       if (!context.currentUser) {
         throw new GraphQLError("Not authenticated", {
           extensions: {
@@ -204,7 +204,7 @@ const resolvers = {
         id: user._id,
       };
 
-      return { value: jwt.sign(userForToken, JWT_SECRET) };
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
     },
   },
 };
