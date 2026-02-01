@@ -2,6 +2,7 @@ import { useState } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import RecommendedBooks from "./components/Recommended";
 import { useApolloClient, useQuery } from "@apollo/client/react";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 
@@ -28,6 +29,10 @@ const App = () => {
     localStorage.getItem("authors-book-user-token"),
   );
 
+  const [favoriteGenre, setFavoriteGenre] = useState(
+    localStorage.getItem("favorite-genre"),
+  );
+
   const authorsResult = useQuery(ALL_AUTHORS);
   const booksResult = useQuery(ALL_BOOKS);
 
@@ -45,7 +50,7 @@ const App = () => {
     setErrorMessage(message);
     setTimeout(() => {
       setErrorMessage(null);
-    }, 10000);
+    }, 5000);
   };
 
   if (!token) {
@@ -57,7 +62,7 @@ const App = () => {
             <Typography variant="h5" mb={2}>
               Login
             </Typography>
-            <LoginForm setToken={setToken} setError={notify} />
+            <LoginForm setToken={setToken} setError={notify} setFavoriteGenre={setFavoriteGenre}/>
           </Paper>
         </Box>
       </Container>
@@ -66,24 +71,17 @@ const App = () => {
 
   return (
     <Container maxWidth="md">
-      {" "}
       <Box mt={3}>
-        {" "}
-        <Notify errorMessage={errorMessage} /> {/* TOP NAVIGATION BAR */}{" "}
+        <Notify errorMessage={errorMessage} />
         <AppBar position="static" color="default" elevation={1}>
-          {" "}
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            {" "}
-            <Typography variant="h6">Library App</Typography>{" "}
+            <Typography variant="h6">Library App</Typography>
             <Button color="error" variant="outlined" onClick={onLogout}>
-              {" "}
-              Logout{" "}
-            </Button>{" "}
-          </Toolbar>{" "}
-        </AppBar>{" "}
-        {/* TABS */}{" "}
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
         <Paper elevation={2} sx={{ mb: 3, mt: 2 }}>
-          {" "}
           <Tabs
             value={page}
             onChange={(e, value) => setPage(value)}
@@ -91,36 +89,41 @@ const App = () => {
             indicatorColor="primary"
             centered
           >
-            {" "}
-            <Tab label="Authors" value="authors" />{" "}
-            <Tab label="Books" value="books" />{" "}
-            <Tab label="Add Book" value="add" />{" "}
-          </Tabs>{" "}
-        </Paper>{" "}
-        {/* PAGE CONTENT */}{" "}
+            <Tab label="Authors" value="authors" />
+            <Tab label="Books" value="books" />
+            <Tab label="Add Book" value="add" />
+            <Tab label="Recommended" value="recommended" />
+          </Tabs>
+        </Paper>
         {page === "authors" && (
           <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-            {" "}
             <Authors
               show={true}
               authors={authorsResult.data.allAuthors}
               setError={notify}
-            />{" "}
+            />
           </Paper>
-        )}{" "}
+        )}
         {page === "books" && (
           <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-            {" "}
-            <Books show={true} books={booksResult.data.allBooks} />{" "}
+            <Books show={true} books={booksResult.data.allBooks} />
           </Paper>
-        )}{" "}
+        )}
         {page === "add" && (
           <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-            {" "}
-            <NewBook show={true} setError={notify} />{" "}
+            <NewBook show={true} setError={notify} />
           </Paper>
-        )}{" "}
-      </Box>{" "}
+        )}
+
+        {page === "recommended" && (
+          <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+            <RecommendedBooks
+              books={booksResult.data.allBooks}
+              favoriteGenre={favoriteGenre}
+            />
+          </Paper>
+        )}
+      </Box>
     </Container>
   );
 };

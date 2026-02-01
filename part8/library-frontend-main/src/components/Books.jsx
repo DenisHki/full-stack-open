@@ -54,6 +54,7 @@ const Books = (props) => {
           <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
             <TableCell sx={{ fontWeight: "bold" }}>Book name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Author</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Genre</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Published</TableCell>
           </TableRow>
         </TableHead>
@@ -62,6 +63,7 @@ const Books = (props) => {
             <TableRow key={b.id}>
               <TableCell>{b.title}</TableCell>
               <TableCell>{b.author.name}</TableCell>
+              <TableCell>{b.genres.join(", ")}</TableCell>
               <TableCell>{b.published}</TableCell>
             </TableRow>
           ))}
