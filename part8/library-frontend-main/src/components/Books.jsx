@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useQuery } from "@apollo/client/react";
+import { ALL_BOOKS } from "../queries";
+
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,17 +14,26 @@ import Chip from "@mui/material/Chip";
 const Books = (props) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
 
+  const { data, loading } = useQuery(ALL_BOOKS, {
+    variables: { genre: selectedGenre },
+  });
+
+  const { data: allBooksData } = useQuery(ALL_BOOKS, {
+    variables: { genre: null },
+  });
+
   if (!props.show) {
     return null;
   }
 
-  const books = props.books;
+  if (loading) {
+    return <div>loading...</div>;
+  }
 
-  const allGenres = [...new Set(books.flatMap((book) => book.genres))];
+  const books = data?.allBooks || [];
+  const allBooks = allBooksData?.allBooks || [];
 
-  const booksToShow = selectedGenre
-    ? books.filter((book) => book.genres.includes(selectedGenre))
-    : books;
+  const allGenres = [...new Set(allBooks.flatMap((book) => book.genres))];
 
   return (
     <Container maxWidth="md">
@@ -59,7 +71,7 @@ const Books = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {booksToShow.map((b) => (
+          {books.map((b) => (
             <TableRow key={b.id}>
               <TableCell>{b.title}</TableCell>
               <TableCell>{b.author.name}</TableCell>
@@ -73,7 +85,7 @@ const Books = (props) => {
       {selectedGenre && (
         <Box mt={2}>
           <em>
-            Showing {booksToShow.length} book(s) in genre "{selectedGenre}"
+            Showing {books.length} book(s) in genre "{selectedGenre}"
           </em>
         </Box>
       )}

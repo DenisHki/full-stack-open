@@ -62,7 +62,11 @@ const App = () => {
             <Typography variant="h5" mb={2}>
               Login
             </Typography>
-            <LoginForm setToken={setToken} setError={notify} setFavoriteGenre={setFavoriteGenre}/>
+            <LoginForm
+              setToken={setToken}
+              setError={notify}
+              setFavoriteGenre={setFavoriteGenre}
+            />
           </Paper>
         </Box>
       </Container>
@@ -106,7 +110,7 @@ const App = () => {
         )}
         {page === "books" && (
           <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-            <Books show={true} books={booksResult.data.allBooks} />
+            <Books show={true} />
           </Paper>
         )}
         {page === "add" && (
