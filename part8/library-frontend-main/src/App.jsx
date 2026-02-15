@@ -28,7 +28,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const client = useApolloClient();
-
+/*
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded;
@@ -37,6 +37,15 @@ const App = () => {
       );
     },
   });
+*/
+useSubscription(BOOK_ADDED, {
+  onData: (payload) => {
+    console.log("SUB FIRED", payload);
+  },
+  onError: (err) => {
+    console.log("SUB ERROR", err);
+  },
+});
 
   const [token, setToken] = useState(
     localStorage.getItem("authors-book-user-token"),
