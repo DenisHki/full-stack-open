@@ -26,7 +26,6 @@ const SetBirthday = (props) => {
       refetchQueries: [{ query: ALL_AUTHORS }],
       onError: (error) => setError(error.message),
     });
-
     setName("");
     setBorn("");
   };

@@ -48,8 +48,17 @@ export const CREATE_BOOK = gql`
       genres: $genres
     ) {
       ...BookDetails
-      }
     }
+  }
+  ${BOOK_DETAILS}
+`;
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
   ${BOOK_DETAILS}
 `;
 

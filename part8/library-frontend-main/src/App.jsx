@@ -3,8 +3,12 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import RecommendedBooks from "./components/Recommended";
-import { useApolloClient, useQuery } from "@apollo/client/react";
-import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
+import {
+  useApolloClient,
+  useQuery,
+  useSubscription,
+} from "@apollo/client/react";
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from "./queries";
 
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -24,6 +28,15 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded;
+      window.alert(
+        `New book added: "${addedBook.title}" by ${addedBook.author.name}`,
+      );
+    },
+  });
 
   const [token, setToken] = useState(
     localStorage.getItem("authors-book-user-token"),
