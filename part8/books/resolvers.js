@@ -1,6 +1,6 @@
 const { GraphQLError } = require("graphql");
 const jwt = require("jsonwebtoken");
-const { PubSub } = require("graphql-subscriptions");
+const { PubSub } = require('graphql-subscriptions')
 
 const User = require("./models/user");
 const Author = require("./models/author");
