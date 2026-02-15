@@ -1,9 +1,12 @@
 const { GraphQLError } = require("graphql");
 const jwt = require("jsonwebtoken");
+const { PubSub } = require("graphql-subscriptions");
 
 const User = require("./models/user");
 const Author = require("./models/author");
 const Book = require("./models/book");
+
+const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
@@ -94,7 +97,11 @@ const resolvers = {
         });
       }
 
-      return book.populate("author");
+      const populatedBook = await book.populate("author");
+
+      pubsub.publish("BOOK_ADDED", { bookAdded: populatedBook });
+
+      return populatedBook;
     },
 
     editAuthor: async (root, args, context) => {
@@ -205,6 +212,12 @@ const resolvers = {
       };
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
+    },
+  },
+
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
     },
   },
 };

@@ -46,6 +46,10 @@ const typeDefs = /* GraphQL */ `
 
     editAuthor(name: String!, setBornTo: Int!): Author
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `;
 
 module.exports = typeDefs;

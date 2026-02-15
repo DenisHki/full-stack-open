@@ -1,5 +1,14 @@
 const { ApolloServer } = require("@apollo/server");
-const { startStandaloneServer } = require("@apollo/server/standalone");
+const { expressMiddleware } = require('@as-integrations/express5')
+const {
+  ApolloServerPluginDrainHttpServer,
+} = require("@apollo/server/plugin/drainHttpServer");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
+const { WebSocketServer } = require("ws");
+const { useServer } = require('graphql-ws/use/ws')
 const jwt = require("jsonwebtoken");
 
 const User = require("./models/user");
@@ -8,32 +17,71 @@ const typeDefs = require("./schema");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const startServer = (port) => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+const startServer = async (port) => {
+  const app = express();
+  const httpServer = http.createServer(app);
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/",
   });
 
-  startStandaloneServer(server, {
-    listen: { port: 4000 },
-    context: async ({ req }) => {
-      const auth = req ? req.headers.authorization : null;
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-      if (auth && auth.startsWith("Bearer ")) {
-        const token = auth.substring(7);
-        try {
-          const decodedToken = jwt.verify(token, JWT_SECRET);
-          const currentUser = await User.findById(decodedToken.id);
-          return { currentUser };
-        } catch (error) {
-          return {};
-        }
-      }
-
-      return {};
+  const serverCleanup = useServer(
+    {
+      schema,
+      context: async (ctx) => {
+        return {};
+      },
     },
-  }).then(({ url }) => {
-    console.log(`Server ready at ${url}`);
+    wsServer,
+  );
+
+  const server = new ApolloServer({
+    schema,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
+  });
+
+  await server.start();
+
+  app.use(
+    "/",
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const auth = req ? req.headers.authorization : null;
+
+        if (auth && auth.startsWith("Bearer ")) {
+          const token = auth.substring(7);
+          try {
+            const decodedToken = jwt.verify(token, JWT_SECRET);
+            const currentUser = await User.findById(decodedToken.id);
+            return { currentUser };
+          } catch (error) {
+            return {};
+          }
+        }
+
+        return {};
+      },
+    }),
+  );
+
+  httpServer.listen(port, () => {
+    console.log(`Server ready at http://localhost:${port}`);
   });
 };
 
