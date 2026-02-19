@@ -16,10 +16,10 @@ Full Stack Open is a comprehensive course that covers:
 - State management with Redux and React Query  
 - Testing with Jest and Supertest  
 - CI/CD and deployment  
-- TypeScript fundamentals  
-- Containerization and relational databases (later parts)
+- TypeScript   
+- Containerization and relational databases
 
-This repository documents my progress through Parts 0–9.
+This repository documents my progress through Parts 0–13.
 
 ---
 
