@@ -25,19 +25,16 @@ This repository documents my progress through Parts 0–13.
 
 ## 📂 Repository Structure
 
-| Part | Description |
-|------|-------------|
-| part0 | Fundamentals of Web Apps |
-| part1 | React Basics |
-| part2 | Communicating with Server |
-| part3 | **Stored in separate repo** → [Part 3](https://github.com/DenisHki/full-stack-open-part3) |
-| part4 | Testing Express Servers |
-| part5 | React Testing |
-| part6 | State Management (Redux) |
-| part7 | React Router, Custom Hooks |
-| part8 | GraphQL |
-| part9 | TypeScript |
-
+- **part0** — Fundamentals  
+- **part1** — React Basics  
+- **part2** — Communicating with Server  
+- **part3** — Stored in separate repo → [Part 3](https://github.com/DenisHki/full-stack-open-part3)  
+- **part4** — Testing Express Servers  
+- **part5** — React Testing  
+- **part6** — State Management  
+- **part7** — Advanced React  
+- **part8** — GraphQL  
+- **part9** — TypeScript  
 
 **Part 3 repository:** [_part 3_](https://github.com/DenisHki/full-stack-open-part3)
 
