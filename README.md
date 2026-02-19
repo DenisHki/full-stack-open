@@ -99,9 +99,7 @@ Backend projects may require environment variables (e.g., MongoDB URI).
 
 ## 📜 Certificate
 
-**Full Stack Open Certificate:**  
-https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/a691348190e91a7dc71162bedf459253
-
+![Full Stack Open Certificate](./certificate.png)
 
 ---
 
