@@ -19,8 +19,6 @@ Full Stack Open is a comprehensive course that covers:
 - TypeScript   
 - Containerization and relational databases
 
-This repository documents my progress through Parts 0–13.
-
 ---
 
 ## 📂 Repository Structure
