@@ -32,10 +32,8 @@ Full Stack Open is a comprehensive course that covers:
 - **part6** — State Management  
 - **part7** — Advanced React  
 - **part8** — GraphQL  
-- **part9** — TypeScript  
-
-**Part 3 repository:** [_part 3_](https://github.com/DenisHki/full-stack-open-part3)
-
+- **part9** — TypeScript
+  
 ---
 
 ## 🚀 Running the Projects
