@@ -37,7 +37,7 @@ This repository documents my progress through Parts 0–9.
 ├── part8/
 └── part9/
 
-**Part 3 repository:** _Add your link here_
+**Part 3 repository:** [_Add your link here_](https://github.com/DenisHki/full-stack-open-part3)
 
 ---
 
