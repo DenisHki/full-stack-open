@@ -83,7 +83,7 @@ Backend projects may require environment variables (e.g., MongoDB URI).
 
 ## 🔗 Live Demos 
 
-- Phonebook App: [_Add link_](https://full-stack-open-part3-u6p2.onrender.com/)  
+- Phonebook App: [_Render link_](https://full-stack-open-part3-u6p2.onrender.com/)  
 
 ---
 
